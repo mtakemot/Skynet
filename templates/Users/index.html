@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load staticfiles %} <!-- New line -->
+
+<html>
+
+    <head>
+        <title>Users</title>
+    </head>
+
+    <body>
+        {% if user.is_authenticated %}
+        <h1>Welcome back to Skynet, {{ user.username }}!</h1>
+        <a href="/Users/restricted/">Restricted Page</a><br />
+        <a href="/Users/display_services/">Click here to see your active subscription plans</a> <br/>
+        <a href="/Users/logout/">Logout</a><br />
+        {% else %}
+        <h1>Welcome to Skynet!</h1>
+        <a href="/Users/register/">New Customers Register Here</a><br />
+        <a href="/Users/login/">Returning Customers Login Here</a>
+        {% endif %}
+          {% if categories %}
+        <!--this will probably be an area to list services/advertise etc-->
+            <ul>
+                {% for category in categories %}
+                <li><a href="/Users/category/{{ category.slug }}">{{ category.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}s
+            <strong>There are no categories present.</strong>
+        {% endif %}
+        <a href="/Users/about/">About</a><br />
+        <!--CREATE VIEW AND LINK WITH LIST OF SERVICES-->
+        <a href="/Users/add_category/">Add a New Category</a><br />
+
+        <img src ="{% static "images/logo.jpg" %}" alt = "Logo" />
+    </body>
+
+</html>

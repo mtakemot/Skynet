@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Current Services</title>
+</head>
+<body>
+    <h1>
+        Current Services:<br>
+    </h1>
+    <form id="display_services" method="get" action="/Users/display_services/">
+    {% for service in display_services %}
+        {{service.name}}
+    {% endfor %}
+    </form>
+</body>
+</html>

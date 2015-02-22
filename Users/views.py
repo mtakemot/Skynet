@@ -204,6 +204,8 @@ def add_package(request):
         current_user.save()
         newPackage = Service(name=package, description='', price=0, term_fee=0)
         newPackage.save()
+        current_user.services.add(newPackage)
+       ##newPackage.save()
         #print newPackage.name
         #adds package to users list of services
         print("HEHE")

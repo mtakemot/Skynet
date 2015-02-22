@@ -105,6 +105,7 @@ def register(request):
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             user.set_password(user.password)
+
             user.save()
 
             # Now sort out the UserProfile instance.
@@ -112,6 +113,7 @@ def register(request):
             # This delays saving the model until we're ready to avoid integrity problems.
             profile = profile_form.save(commit=False)
             profile.user = user
+            profile.username = user
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
@@ -143,7 +145,7 @@ def register(request):
 
 def user_login(request):
     # If the request is a HTTP POST, try to pull out the relevant information.
-    print request.user
+    print (request.user)
     if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
@@ -204,8 +206,17 @@ def add_package(request):
         newPackage.save()
         #print newPackage.name
         #adds package to users list of services
-        print current_user.user
-        current_user.services.add(newPackage)
+        print("HEHE")
+        print (current_user.user)
+        print("HAHAH")
+
+
+       # if current_user.services.all() != newPackage.name:
+          #  current_user.services.add(newPackage)
+           # print("package not w/ user, registering this package: ", current_user.services.all())#newPackage.name)
+        #if (s.name for s in current_user.services.all()) != newPackage.name():
+            #current_user.services.add(newPackage)
+            #print("adding: ", newPackage.name)
 
 
         #updates current users new attribute
@@ -223,8 +234,8 @@ def add_package(request):
 def display_services(request):
 
         current_user = UserProfile.objects.get(user=request.user)
-        print current_user.user
-        print current_user.services.all()
+        print (current_user.user)
+        print (current_user.services.all())
         #for service in current_user.services.all():
           #  print service.name
         service_form = DisplayForm()

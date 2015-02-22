@@ -40,11 +40,12 @@ class UserProfile(models.Model):
     userEmail = models.CharField(max_length=45, blank=True) #user email
     services = models.ManyToManyField(serviceModels)
 
-    #addservice = forms.ChoiceField(choices=('Package 1', 'Package 2', 'Package 3', 'Package 4', 'Package 5'))
-    #services is defined as many services that can be accessed by many users
+
 
     def get_services(self):
-        return "\n".join([s.services for s in s.services.all()])
+        return "\n".join([s.name for s in self.services.all()])
+
+
 
     # Override the __unicode__() method to return out something meaningful!
     def __str__(self):

@@ -66,3 +66,5 @@ class DeleteServiceForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = ('name', 'description', 'price', 'term_fee')
+
+#class CreateService(forms.ModelForm):

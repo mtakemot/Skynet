@@ -3,4 +3,4 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Skynet says this page with informatino about packages!")
+    return HttpResponse("Skynet says this page with information about packages!")

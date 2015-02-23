@@ -11,6 +11,6 @@ class Service(models.Model):
     def __str__(self):
         return self.name
 
-
+#class AllService(models.Model):
 #class Package(models.Model):
     #services = models.ManyToOneRel(Service)

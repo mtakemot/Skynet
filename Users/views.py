@@ -114,6 +114,7 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.username = user
+            profile.f
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
@@ -196,30 +197,32 @@ def user_logout(request):
 
 @login_required
 def add_package(request):
+    #if the request on this page coming after loading and from a user input:
     if request.method == 'POST':
-        package = request.POST['package']
-        #print "Posting"
-        #access current user
+        #from our HTML, the button selected is passed here in terms of the Service
+        #object's name field from the html code: value="{{service.name}}"
+        #this will just copy the name locally so that we can iterate through the
+        #Service database and find the object with matching name.
+        package_name = request.POST['service']
+
+        print("testing service's name from user selection: ",package_name)
+
+        for services in Service.objects.all():
+            if services.name == package_name:
+                package = services
+
+        print("testing package name after searching in Service table: ", package.name)
+
         current_user = UserProfile.objects.get(user=request.user)
         current_user.save()
-        newPackage = Service(name=package, description='', price=0, term_fee=0)
-        newPackage.save()
-        #print newPackage.name
-        #adds package to users list of services
+
+        current_user.services.add(package)
+
         print("HEHE")
         print (current_user.user)
         print("HAHAH")
 
-
-       # if current_user.services.all() != newPackage.name:
-          #  current_user.services.add(newPackage)
-           # print("package not w/ user, registering this package: ", current_user.services.all())#newPackage.name)
-        #if (s.name for s in current_user.services.all()) != newPackage.name():
-            #current_user.services.add(newPackage)
-            #print("adding: ", newPackage.name)
-
-
-        #updates current users new attribute
+        #updates current user's list of services, and
         return HttpResponseRedirect('/Users/display_services')
 
 
@@ -227,8 +230,10 @@ def add_package(request):
     else:
         #just render the page the first time
         print("hello")
-        service_form = ServiceForm()
-        return render(request, 'Users/add_package.html', {'service_form': service_form})
+        service_form = DisplayForm()
+        #passing to the HTML ALL the contents in the Service database
+        service_form.services = Service.objects.all()
+        return render(request, 'Users/add_package.html', {'service_form': service_form.services.all()})
 
 @login_required
 def display_services(request):

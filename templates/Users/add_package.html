@@ -9,12 +9,20 @@
         Select a package to purchase:<br>
     </h1>
     <form id="service_form" method="post" action="/Users/add_package/">
-        {% csrf_token %}
+        <!--
         <input type="radio" name="package" value="package 1">Package 1<br>
         <input type="radio" name="package" value="package 2">Package 2<br>
-        <input type="radio" name="package" value="package 3">Package 3<br>
+        <input type="radio" name="package" value="package 3"a>Package 3<br>
         <input type="radio" name="package" value="package 4">Package 4<br>
         <input type="radio" name="package" value="package 5">Package 5<br>
+        <input type="submit" name="submit" value="Purchase" />
+        -->
+        {% csrf_token %}
+        {% for service in service_form%}
+            <input type = "radio" name = "service" value="{{ service.name }}">
+            {{service.name}}
+
+        {% endfor %}<br/>
         <input type="submit" name="submit" value="Purchase" />
     </form>
 </body>

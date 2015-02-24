@@ -43,7 +43,7 @@ class UserProfile(models.Model):
 
 
     def get_services(self):
-        return "\n".join([s.name for s in self.services.all()])
+        return "\n".join([p.name for p in self.packages.all()])
 
 
 

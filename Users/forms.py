@@ -50,7 +50,13 @@ class UserProfileForm(forms.ModelForm):
         fields = ('website', 'picture')
 
 class ServiceForm(forms.ModelForm):
-    service = forms.ChoiceField(widget=forms.RadioSelect)
+    services = forms.ChoiceField(widget=forms.RadioSelect)
+    class Meta:
+        model = Service
+        fields = ('name', 'description', 'price', 'term_fee')
+
+class BillForm(forms.ModelForm):
+    services = forms.CharField(max_length=120, label="Current Services")
     class Meta:
         model = Service
         fields = ('name', 'description', 'price', 'term_fee')

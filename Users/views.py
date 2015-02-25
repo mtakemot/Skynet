@@ -355,7 +355,7 @@ def market_rep(request):
             #this will just copy the name locally so that we can iterate through the
             #Service database and find the object with matching name.
             package_name = request.POST['service']
-
+            print(package_name)
 
             for services in Service.objects.all():
                 if services.name == package_name:

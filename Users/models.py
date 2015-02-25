@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User, UserManager
 from django.template.defaultfilters import slugify
 from Packages.models import Service as serviceModels
+from Packages.models import Bundle as bundleModels
 # Create your models here.
 
 
@@ -39,6 +40,7 @@ class UserProfile(models.Model):
     lname = models.CharField(max_length=20, blank=True, verbose_name="Last Name") #user last name
     userEmail = models.CharField(max_length=45, blank=True) #user email
     services = models.ManyToManyField(serviceModels, blank=True)
+    bundles = models.ManyToManyField(bundleModels, blank=True)
     is_Market = models.BooleanField(default=False)
 
 

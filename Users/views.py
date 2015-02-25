@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+
     # Construct a dictionary to pass to the template engine as its context.
     # Note the key bold message is the same as {{ boldmessage }} in the template!
     # Query the database for a list of ALL categories currently stored.
@@ -23,6 +24,8 @@ def index(request):
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
+
+
 
     return render(request, 'Users/index.html', context_dict)
 
@@ -228,6 +231,13 @@ def user_logout(request):
 @login_required
 def add_package(request):
     #if the request on this page coming after loading and from a user input:
+    current_user = UserProfile.objects.get(user=request.user)
+
+    #only allow access to customers, redirect market rep and cust serv reps
+    redirect = check_permission(current_user)
+    if redirect:
+        return redirect
+
     if request.method == 'POST':
         #from our HTML, the button selected is passed here in terms of the Service
         #object's name field from the html code: value="{{service.name}}"
@@ -244,7 +254,13 @@ def add_package(request):
         print("testing package name after searching in Service table: ", package.name)
         print (request.user)
 
-        current_user = UserProfile.objects.get(user=request.user)
+        #current_user = UserProfile.objects.get(user=request.user)
+
+        #only allow access to customers, redirect market rep and cust serv reps
+        redirect = check_permission(current_user)
+        if redirect:
+            return redirect
+
         current_user.save()
 
         current_user.services.add(package)
@@ -270,6 +286,12 @@ def add_package(request):
 def display_services(request):
 
         current_user = UserProfile.objects.get(user=request.user)
+
+        #only allow access to customers, redirect market rep and cust serv reps
+        redirect = check_permission(current_user)
+        if redirect:
+            return redirect
+
         print (current_user.user)
         print (current_user.services.all())
         #for service in current_user.services.all():
@@ -282,6 +304,7 @@ def display_services(request):
 def view_bill(request):
 
     current_user = UserProfile.objects.get(user=request.user)
+
 
     #only allow access to customers, redirect market rep and cust serv reps
     redirect = check_permission(current_user)
@@ -298,10 +321,19 @@ def view_bill(request):
 
 @login_required
 def delete_services(request):
+
+    current_user = UserProfile.objects.get(user=request.user)
+    #only allow access to customers, redirect market rep and cust serv reps
+    redirect = check_permission(current_user)
+    if redirect:
+        return redirect
+
     if request.method == 'POST':
         package = request.POST['service']
         #access current user
-        current_user = UserProfile.objects.get(user=request.user)
+        #current_user = UserProfile.objects.get(user=request.user)
+
+
         newPackage = Service(name=package, description='', price=0, term_fee=0)
         print ("test deleting package name: ")
         print (newPackage.name)
@@ -326,7 +358,7 @@ def delete_services(request):
         #just render the page the first time
         #print("hello")
         service_form = DisplayForm()
-        current_user = UserProfile.objects.get(user=request.user)
+        #current_user = UserProfile.objects.get(user=request.user)
         service_form.services = current_user.services.all()
         return render(request, 'Users/delete_services.html', {'service_form': service_form.services})
 

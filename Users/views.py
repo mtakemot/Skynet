@@ -276,5 +276,6 @@ def delete_services(request):
     else:
         #just render the page the first time
         #print("hello")
-        service_form = ServiceForm()
+        service_form = DisplayForm()
+
         return render(request, 'Users/delete_services.html', {'service_form': service_form})

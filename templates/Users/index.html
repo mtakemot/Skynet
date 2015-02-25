@@ -10,8 +10,8 @@
     <body>
         {% if user.is_authenticated %}
         <h1>Welcome back to Skynet, {{ user.username }}!</h1>
-        <a href="/Users/restricted/">Restricted Page</a><br />
-        <a href="/Users/display_services/">Click here to see your active subscription plans</a> <br/>
+        <a href="/Users/restricted/">Restricted Page</a>
+        <a href="/Users/display_services/">Click here to see your active subscription plans</a><br />
         <a href="/Users/logout/">Logout</a><br />
         {% else %}
         <h1>Welcome to Skynet!</h1>

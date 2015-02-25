@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm
+from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm
 from Packages.models import Service
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -114,7 +114,6 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.username = user
-            profile.f
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
@@ -126,6 +125,7 @@ def register(request):
 
             # Update our variable to tell the template registration was successful.
             registered = True
+
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
@@ -140,6 +140,7 @@ def register(request):
         profile_form = UserProfileForm()
 
     # Render the template depending on the context.
+
     return render(request,
             'Users/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
@@ -212,6 +213,7 @@ def add_package(request):
                 package = services
 
         print("testing package name after searching in Service table: ", package.name)
+        print (request.user)
 
         current_user = UserProfile.objects.get(user=request.user)
         current_user.save()
@@ -246,6 +248,13 @@ def display_services(request):
         service_form = DisplayForm()
         service_form.services = current_user.services
         return render(request, 'Users/display_services.html', {'display_services': service_form.services.all()})
+
+@login_required
+def view_bill(request):
+    current_user = UserProfile.objects.get(user=request.user)
+    bill_form = BillForm()
+    bill_form.services = current_user.services.all()
+    return render(request, 'Users/view_bill.html', {'display_services': bill_form.services})
 
 @login_required
 def delete_services(request):

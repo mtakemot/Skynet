@@ -13,5 +13,6 @@ urlpatterns = patterns('',
        url(r'^logout/$', views.user_logout, name='logout'),
        url(r'^add_package/$', views.add_package, name='add_package'),
        url(r'^display_services/$',views.display_services, name='display_services'),
-       url(r'^delete_services/$',views.delete_services, name='delete_services')
+       url(r'^delete_services/$',views.delete_services, name='delete_services'),
+       url(r'^view_bill/$', views.view_bill, name='view_bill')
 )

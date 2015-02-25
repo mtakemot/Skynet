@@ -397,10 +397,10 @@ def market_rep(request):
 
             newService = Service(name=service_name,description=service_description,
                                  price=service_price,term_fee=service_term)
-            try:
-                new_service = request.POST['service']
-            except MultiValueDictKeyError:
-                return HttpResponseRedirect("/Users/market_rep/")
+            #try:
+                #new_service = request.POST['service']
+            #except MultiValueDictKeyError:
+                #return HttpResponseRedirect("/Users/market_rep/")
 
             #Service.objects.add(newService)
             newService.save()

@@ -254,7 +254,10 @@ def view_bill(request):
     current_user = UserProfile.objects.get(user=request.user)
     bill_form = BillForm()
     bill_form.services = current_user.services.all()
-    return render(request, 'Users/view_bill.html', {'display_services': bill_form.services})
+    cost = 0
+    for service in current_user.services.all():
+        cost += service.price
+    return render(request, 'Users/view_bill.html', {'display_services': bill_form.services, 'total':cost})
 
 @login_required
 def delete_services(request):

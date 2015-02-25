@@ -15,6 +15,9 @@
         td {
             padding: 10px;
         }
+        p {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -25,9 +28,11 @@
     <table class="center" border="1" style="width:25%">
      <tr><th>Service</th><th>Price</th><th>Termination Fee</th></tr>
     {% for package in display_services %}
-        <tr><td>{{package.name}}</td> <td>${{ package.price }}</td> <td>${{package.term_fee}}</td></tr>
+        <tr><td>{{package}}</td> <td>${{ package.price }}</td> <td>${{package.term_fee}}</td></tr>
     {% endfor %}
     </table>
     </form>
+    <p>Total is: ${{ total }}</p>
+
 </body>
 </html>

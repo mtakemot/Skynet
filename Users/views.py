@@ -6,6 +6,7 @@ from Packages.models import Service
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.utils.datastructures import MultiValueDictKeyError
 # Create your views here.
 
 
@@ -243,7 +244,11 @@ def add_package(request):
         #object's name field from the html code: value="{{service.name}}"
         #this will just copy the name locally so that we can iterate through the
         #Service database and find the object with matching name.
-        package_name = request.POST['service']
+        try:
+            package_name = request.POST['service']
+        except MultiValueDictKeyError:
+            return HttpResponseRedirect("/Users/add_package/")
+
 
         print("testing service's name from user selection: ",package_name)
 
@@ -329,7 +334,11 @@ def delete_services(request):
         return redirect
 
     if request.method == 'POST':
-        package = request.POST['service']
+        try:
+            package = request.POST['service']
+        except MultiValueDictKeyError:
+            return HttpResponseRedirect("/Users/delete_services/")
+
         #access current user
         #current_user = UserProfile.objects.get(user=request.user)
 
@@ -375,8 +384,16 @@ def market_rep(request):
     if request.method == 'POST':
         button = request.POST['submit']
 
+
         if button == 'Create Service':
             print("testing button from market_rep")
+
+            try:
+                new_service = request.POST['service']
+            except MultiValueDictKeyError:
+                return HttpResponseRedirect("/Users/market_rep/")
+
+            return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all()})
 
 
 
@@ -386,7 +403,11 @@ def market_rep(request):
             #object's name field from the html code: value="{{service.name}}"
             #this will just copy the name locally so that we can iterate through the
             #Service database and find the object with matching name.
-            package_name = request.POST['service']
+            try:
+                package_name = request.POST['service']
+            except MultiValueDictKeyError:
+                return HttpResponseRedirect("/Users/market_rep/")
+
             print(package_name)
 
             for services in Service.objects.all():

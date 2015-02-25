@@ -196,7 +196,7 @@ def user_login(request):
                 print(current_user.is_Market)
 
                 if current_user.is_Market:
-                    return HttpResponseRedirect('/Users/view_bill')
+                    return HttpResponseRedirect('/Users/market_rep')
 
                 else:
                     return HttpResponseRedirect('/Users/')
@@ -377,9 +377,24 @@ def market_rep(request):
 
         if button == 'Create Service':
             print("testing button from market_rep")
+            service_name = request.POST['name']
+            print("Service name:", service_name)
+            service_description = request.POST['description']
+            print("Service description:", service_description)
+            service_price = request.POST['price']
+            print("Service price:", service_price)
+            service_term = request.POST['term']
+            print("Service term:", service_term)
 
+            newService = Service(name=service_name,description=service_description,
+                                 price=service_price,term_fee=service_term)
 
+            #Service.objects.add(newService)
+            newService.save()
+            service_form = DisplayForm()
+            service_form.services = Service.objects.all()
 
+            return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all()})
         elif button == 'Delete':
 
             #from our HTML, the button selected is passed here in terms of the Service
@@ -406,6 +421,7 @@ def market_rep(request):
 
             current_user.services.add(package)
             return HttpResponseRedirect('/Users/market_rep')
+
     else:
 
         return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all()})

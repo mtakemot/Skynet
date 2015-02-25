@@ -27,7 +27,22 @@
 
         {% endfor %}<br/>
         </table>
-        <input type="submit" name="submit" value="Delete" />
+        <input type="submit" name="submit" value="Delete" /><br/><br/><br/>
+        <table border="1" width="25%">
+            <tr><th>Create Service</th><th>Price</th></tr>
+            <tr><td>
+            Service Name: </td><td><input type="text" name="name" value="" size="50" /></td>
+            </tr>
+            <tr><td>
+            Description: </td><td><input type="text" name="description" value="" size="50" /></td>
+            </tr>
+            <tr><td>
+            Price: </td> <td><input type="number" name="price" value="" min="1" size="50" /></td>
+            </tr>
+            <tr><td>
+            Term Fee: </td><td><input type="number" name="term" value="" min="1" size="50" /></td>
+            </tr>
+        </table>
         <input type="submit" name="submit" value="Create Service" />
         <li><a href="/Users/market_rep/">LINK</a></li>
     </form>

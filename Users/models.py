@@ -38,7 +38,9 @@ class UserProfile(models.Model):
     fname = models.CharField(max_length=20, blank=True, verbose_name="First Name") #user first name
     lname = models.CharField(max_length=20, blank=True, verbose_name="Last Name") #user last name
     userEmail = models.CharField(max_length=45, blank=True) #user email
-    services = models.ManyToManyField(serviceModels)
+    services = models.ManyToManyField(serviceModels, blank=True)
+
+    is_MarketRep = models.BooleanField(default=False)
 
 
 

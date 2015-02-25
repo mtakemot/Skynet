@@ -156,7 +156,12 @@ def user_login(request):
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
         user = authenticate(username=username, password=password)
+        print('user.is_MarketRep')
 
+
+        #if a marketing rep logs in, redirect to marketing page
+        #if(current_user.is_MarketRep==True):
+            #return HttpResponseRedirect('/Users/market_rep/')
 
         # If we have a User object, the details are correct.
         # If None (Python's way of representing the absence of a value), no user
@@ -167,6 +172,10 @@ def user_login(request):
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
+                #print(user.is_MarketRep)
+                #print(u.username)
+                #print(user.first_name)
+
                 return HttpResponseRedirect('/Users/')
             else:
                 # An inactive account was used - no logging in!
@@ -220,9 +229,7 @@ def add_package(request):
 
         current_user.services.add(package)
 
-        print("HEHE")
         print (current_user.user)
-        print("HAHAH")
 
         #updates current user's list of services, and
         return HttpResponseRedirect('/Users/display_services')
@@ -291,3 +298,13 @@ def delete_services(request):
         service_form = DisplayForm()
 
         return render(request, 'Users/delete_services.html', {'service_form': service_form})
+
+'''
+@login_required
+def market_rep(request):
+    if request.method=='POST':
+        return
+    else:
+        market_form = MarketForm()
+        return render(request, 'Users/market_rep.html', {'market_form': market_form})
+'''

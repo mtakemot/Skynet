@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 def index(request):
     # Construct a dictionary to pass to the template engine as its context.
-    # Note the key boldmessage is the same as {{ boldmessage }} in the template!
+    # Note the key bold message is the same as {{ boldmessage }} in the template!
     # Query the database for a list of ALL categories currently stored.
     # Order the categories by no. likes in descending order.
     # Retrieve the top 5 only - or all if less than 5.
@@ -190,8 +190,13 @@ def user_login(request):
                 print(request.user)
                 current_user = UserProfile.objects.get(user=request.user)
                 current_user.save()
-                print(current_user.fname)
-                return HttpResponseRedirect('/Users/')
+                print(current_user.is_Market)
+
+                if current_user.is_Market:
+                    return HttpResponseRedirect('/Users/view_bill')
+
+                else:
+                    return HttpResponseRedirect('/Users/')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your User account is disabled.")
@@ -275,7 +280,15 @@ def display_services(request):
 
 @login_required
 def view_bill(request):
+
     current_user = UserProfile.objects.get(user=request.user)
+
+    #only allow access to customers, redirect market rep and cust serv reps
+    redirect = check_permission(current_user)
+    if redirect:
+        return redirect
+
+
     bill_form = BillForm()
     bill_form.services = current_user.services.all()
     cost = 0
@@ -316,3 +329,55 @@ def delete_services(request):
         current_user = UserProfile.objects.get(user=request.user)
         service_form.services = current_user.services.all()
         return render(request, 'Users/delete_services.html', {'service_form': service_form.services})
+
+@login_required
+def market_rep(request):
+    current_user = UserProfile.objects.get(user=request.user)
+    print(current_user.is_Market)
+    service_form = DisplayForm()
+    service_form.services = Service.objects.all()
+
+    if current_user.is_Market == False:
+        return HttpResponseRedirect('/Users/')
+
+    if request.method == 'POST':
+        button = request.POST['submit']
+
+        if button == 'Create Service':
+            print("testing button from market_rep")
+
+
+
+        elif button == 'Delete':
+
+            #from our HTML, the button selected is passed here in terms of the Service
+            #object's name field from the html code: value="{{service.name}}"
+            #this will just copy the name locally so that we can iterate through the
+            #Service database and find the object with matching name.
+            package_name = request.POST['service']
+
+
+            for services in Service.objects.all():
+                if services.name == package_name:
+                    package = services
+                    print(package)
+                    Service.objects.filter(name=package_name).delete()
+                    print("deleting Service object with name: ", package_name)
+
+
+
+            print("testing package name after searching in Service table: ", package.name)
+            print (request.user)
+
+            current_user = UserProfile.objects.get(user=request.user)
+            current_user.save()
+
+            current_user.services.add(package)
+            return HttpResponseRedirect('/Users/market_rep')
+    else:
+
+        return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all()})
+
+def check_permission(UserProfile):
+    if UserProfile.is_Market:
+        return HttpResponseRedirect('/Users/market_rep')

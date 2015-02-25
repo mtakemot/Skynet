@@ -101,10 +101,18 @@ def register(request):
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
+            user.first_name = request.POST['fname']
+            user.last_name = request.POST['lname']
+            user.email = request.POST['email']
+            user.website = request.POST['website']
+
+            print(user.first_name)
+            print(user.last_name)
 
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             user.set_password(user.password)
+
 
             user.save()
 
@@ -114,6 +122,13 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.username = user
+            profile.fname = user.first_name
+            profile.lname = user.last_name
+            profile.userEmail = user.email
+            profile.website=user.website
+            #profile.picture = request.POST['picture']
+
+
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
@@ -121,6 +136,8 @@ def register(request):
                 profile.picture = request.FILES['picture']
 
             # Now we save the UserProfile model instance.
+            #profile.is_Market = False
+
             profile.save()
 
             # Update our variable to tell the template registration was successful.
@@ -156,12 +173,7 @@ def user_login(request):
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
         user = authenticate(username=username, password=password)
-        print('user.is_MarketRep')
 
-
-        #if a marketing rep logs in, redirect to marketing page
-        #if(current_user.is_MarketRep==True):
-            #return HttpResponseRedirect('/Users/market_rep/')
 
         # If we have a User object, the details are correct.
         # If None (Python's way of representing the absence of a value), no user
@@ -169,13 +181,16 @@ def user_login(request):
         if user:
             # Is the account active? It could have been disabled.
             if user.is_active:
+                # debug to see user information
+
+
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                #print(user.is_MarketRep)
-                #print(u.username)
-                #print(user.first_name)
-
+                print(request.user)
+                current_user = UserProfile.objects.get(user=request.user)
+                current_user.save()
+                print(current_user.fname)
                 return HttpResponseRedirect('/Users/')
             else:
                 # An inactive account was used - no logging in!
@@ -229,7 +244,9 @@ def add_package(request):
 
         current_user.services.add(package)
 
+        print("HEHE")
         print (current_user.user)
+        print("HAHAH")
 
         #updates current user's list of services, and
         return HttpResponseRedirect('/Users/display_services')
@@ -269,7 +286,7 @@ def view_bill(request):
 @login_required
 def delete_services(request):
     if request.method == 'POST':
-        package = request.POST['package']
+        package = request.POST['service']
         #access current user
         current_user = UserProfile.objects.get(user=request.user)
         newPackage = Service(name=package, description='', price=0, term_fee=0)
@@ -296,15 +313,6 @@ def delete_services(request):
         #just render the page the first time
         #print("hello")
         service_form = DisplayForm()
-
-        return render(request, 'Users/delete_services.html', {'service_form': service_form})
-
-'''
-@login_required
-def market_rep(request):
-    if request.method=='POST':
-        return
-    else:
-        market_form = MarketForm()
-        return render(request, 'Users/market_rep.html', {'market_form': market_form})
-'''
+        current_user = UserProfile.objects.get(user=request.user)
+        service_form.services = current_user.services.all()
+        return render(request, 'Users/delete_services.html', {'service_form': service_form.services})

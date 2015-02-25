@@ -257,12 +257,12 @@ def view_bill(request):
     cost = 0
     for service in current_user.services.all():
         cost += service.price
-    return render(request, 'Users/view_bill.html', {'display_services': bill_form.services, 'total': cost})
+    return render(request, 'Users/view_bill.html', {'display_services': bill_form.services, 'total':cost})
 
 @login_required
 def delete_services(request):
     if request.method == 'POST':
-        package = request.POST['package']
+        package = request.POST['service']
         #access current user
         current_user = UserProfile.objects.get(user=request.user)
         newPackage = Service(name=package, description='', price=0, term_fee=0)
@@ -288,5 +288,7 @@ def delete_services(request):
     else:
         #just render the page the first time
         #print("hello")
-        service_form = ServiceForm()
-        return render(request, 'Users/delete_services.html', {'service_form': service_form})
+        service_form = DisplayForm()
+        current_user = UserProfile.objects.get(user=request.user)
+        service_form.services = current_user.services.all()
+        return render(request, 'Users/delete_services.html', {'service_form': service_form.services})

@@ -397,15 +397,15 @@ def market_rep(request):
 
             newService = Service(name=service_name,description=service_description,
                                  price=service_price,term_fee=service_term)
-            try:
-                new_service = request.POST['service']
-            except MultiValueDictKeyError:
-                return HttpResponseRedirect("/Users/market_rep/")
+            #try:
+              #  new_service = request.POST['service']
+            #except MultiValueDictKeyError:
+               # return HttpResponseRedirect("/Users/market_rep/")
 
-            #Service.objects.add(newService)
-            newService.save()
+            Service.save(newService)
             service_form = DisplayForm()
             service_form.services = Service.objects.all()
+
 
             return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all()})
         elif button == 'Delete':

@@ -9,8 +9,8 @@
         Current Services:<br>
     </h1>
     <form id="display_services" method="get" action="/Users/display_services/">
-    {% for service in display_services %}
-        {{service.name}}
+    {% for package in display_services %}
+        {{package}}
     {% endfor %}
     </form>
 </body>

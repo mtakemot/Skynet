@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm
+from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm
 from Packages.models import Service
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -101,10 +101,18 @@ def register(request):
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
+            user.first_name = request.POST['fname']
+            user.last_name = request.POST['lname']
+            user.email = request.POST['email']
+            user.website = request.POST['website']
+
+            print(user.first_name)
+            print(user.last_name)
 
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             user.set_password(user.password)
+
 
             user.save()
 
@@ -114,7 +122,13 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.username = user
-            profile.f
+            profile.fname = user.first_name
+            profile.lname = user.last_name
+            profile.userEmail = user.email
+            profile.website=user.website
+            #profile.picture = request.POST['picture']
+
+
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
@@ -122,10 +136,13 @@ def register(request):
                 profile.picture = request.FILES['picture']
 
             # Now we save the UserProfile model instance.
+            #profile.is_Market = False
+
             profile.save()
 
             # Update our variable to tell the template registration was successful.
             registered = True
+
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
@@ -140,6 +157,7 @@ def register(request):
         profile_form = UserProfileForm()
 
     # Render the template depending on the context.
+
     return render(request,
             'Users/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
@@ -163,9 +181,16 @@ def user_login(request):
         if user:
             # Is the account active? It could have been disabled.
             if user.is_active:
+                # debug to see user information
+
+
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
+                print(request.user)
+                current_user = UserProfile.objects.get(user=request.user)
+                current_user.save()
+                print(current_user.fname)
                 return HttpResponseRedirect('/Users/')
             else:
                 # An inactive account was used - no logging in!
@@ -212,6 +237,7 @@ def add_package(request):
                 package = services
 
         print("testing package name after searching in Service table: ", package.name)
+        print (request.user)
 
         current_user = UserProfile.objects.get(user=request.user)
         current_user.save()
@@ -248,9 +274,19 @@ def display_services(request):
         return render(request, 'Users/display_services.html', {'display_services': service_form.services.all()})
 
 @login_required
+def view_bill(request):
+    current_user = UserProfile.objects.get(user=request.user)
+    bill_form = BillForm()
+    bill_form.services = current_user.services.all()
+    cost = 0
+    for service in current_user.services.all():
+        cost += service.price
+    return render(request, 'Users/view_bill.html', {'display_services': bill_form.services, 'total':cost})
+
+@login_required
 def delete_services(request):
     if request.method == 'POST':
-        package = request.POST['package']
+        package = request.POST['service']
         #access current user
         current_user = UserProfile.objects.get(user=request.user)
         newPackage = Service(name=package, description='', price=0, term_fee=0)
@@ -276,5 +312,7 @@ def delete_services(request):
     else:
         #just render the page the first time
         #print("hello")
-        service_form = ServiceForm()
-        return render(request, 'Users/delete_services.html', {'service_form': service_form})
+        service_form = DisplayForm()
+        current_user = UserProfile.objects.get(user=request.user)
+        service_form.services = current_user.services.all()
+        return render(request, 'Users/delete_services.html', {'service_form': service_form.services})

@@ -5,18 +5,39 @@
 
     <head>
         <title>Users</title>
+        <style>
+            body{
+                text-align: center;
+            }
+            table.center{
+                margin-left: auto;
+                margin-right: auto;
+            }
+            td{
+                padding: 5px;
+            }
+        </style>
     </head>
 
     <body>
         {% if user.is_authenticated %}
         <h1>Welcome back to Skynet, {{ user.username }}!</h1>
-        <a href="/Users/restricted/">Restricted Page</a><br />
-        <a href="/Users/display_services/">Click here to see your active subscription plans</a> <br/>
-        <a href="/Users/logout/">Logout</a><br />
+            <table class = "center" border="1">
+        <tr><td><a href="/Users/restricted/">Restricted Page</a></td>
+        <td><a href="/Users/display_services/">Click here to see your active subscription plans</a></td>
+            <td><a href="/Users/add_package/"> Add a Service</a></td>
+            <td><a href="/Users/delete_services/"> Remove a Service</a></td>
+            <td><a href="/Users/view_bill"> View Bill</a></td>
+        <td><a href="/Users/logout/">Logout</a></td>
+            </tr>
+            </table>
         {% else %}
         <h1>Welcome to Skynet!</h1>
-        <a href="/Users/register/">New Customers Register Here</a><br />
-        <a href="/Users/login/">Returning Customers Login Here</a>
+            <table class="center" border="1">
+        <tr><td><a href="/Users/register/">New Customers Register Here</a></td>
+        <td><a href="/Users/login/">Returning Customers Login Here</a></td>
+            </tr>
+            </table>
         {% endif %}
           {% if categories %}
         <!--this will probably be an area to list services/advertise etc-->

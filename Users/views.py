@@ -101,10 +101,18 @@ def register(request):
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
+            user.first_name = request.POST['fname']
+            user.last_name = request.POST['lname']
+            user.email = request.POST['email']
+            user.website = request.POST['website']
+
+            print(user.first_name)
+            print(user.last_name)
 
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             user.set_password(user.password)
+
 
             user.save()
 
@@ -114,6 +122,13 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.username = user
+            profile.fname = user.first_name
+            profile.lname = user.last_name
+            profile.userEmail = user.email
+            profile.website=user.website
+            #profile.picture = request.POST['picture']
+
+
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
@@ -121,6 +136,8 @@ def register(request):
                 profile.picture = request.FILES['picture']
 
             # Now we save the UserProfile model instance.
+            #profile.is_Market = False
+
             profile.save()
 
             # Update our variable to tell the template registration was successful.
@@ -164,9 +181,16 @@ def user_login(request):
         if user:
             # Is the account active? It could have been disabled.
             if user.is_active:
+                # debug to see user information
+
+
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
+                print(request.user)
+                current_user = UserProfile.objects.get(user=request.user)
+                current_user.save()
+                print(current_user.fname)
                 return HttpResponseRedirect('/Users/')
             else:
                 # An inactive account was used - no logging in!

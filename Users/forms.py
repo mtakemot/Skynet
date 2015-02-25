@@ -1,8 +1,11 @@
+from django.forms import CheckboxSelectMultiple
+
 __author__ = 'BCCUB002'
 from django import forms
 from django.contrib.auth.models import User
 from Users.models import Page, Category, UserProfile
-from Packages.models import Service
+from Packages.models import Service, Bundle
+
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")
@@ -48,11 +51,43 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture')
-
+'''
 class ServiceForm(forms.ModelForm):
     services = forms.ChoiceField(widget=forms.RadioSelect)
     class Meta:
         model = Service
+        fields = ('name', 'description', 'price', 'term_fee')
+'''
+class BundleServForm(forms.Form):
+    bundle_services = forms.MultipleChoiceField(
+                                        widget=CheckboxSelectMultiple
+                                        )
+    #name = forms.CharField(max_length=123, )
+    #description = forms.CharField(max_length=250)
+    #price = forms.IntegerField()
+    #term_fee = forms.IntegerField()
+    class Meta:
+        model = Bundle
+        #fields = ('name', 'description', 'price', 'term_fee')
+
+class ServiceForm(forms.ModelForm):
+    name = forms.CharField(max_length=128,)
+    description = forms.CharField(max_length=250)
+    price = forms.IntegerField()
+    term_fee = forms.IntegerField()
+    class Meta:
+        model = Service
+        fields = ('name', 'description', 'price', 'term_fee')
+
+class BundleForm(forms.ModelForm):
+    name = forms.CharField(max_length=123, )
+    description = forms.CharField(max_length=250)
+    price = forms.IntegerField()
+    term_fee = forms.IntegerField()
+    #bundle_services = forms.ChoiceField(widget=forms.CheckboxSelectMultiple )
+    bundle_services = forms.CharField(max_length=120, label="Bundled Services")
+    class Meta:
+        model = Bundle
         fields = ('name', 'description', 'price', 'term_fee')
 
 class BillForm(forms.ModelForm):

@@ -18,6 +18,11 @@ class Bundle(models.Model):
     term_fee = models.IntegerField(default=0)
     bundle_services = models.ManyToManyField(Service, blank=True, )
 
+    def __str__(self):
+        return self.name
+    def get_services(self):
+        return ", ".join([p.name for p in self.bundle_services.all()])
+
 #class AllService(models.Model):
 #class Package(models.Model):
     #services = models.ManyToOneRel(Service)

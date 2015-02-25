@@ -15,5 +15,5 @@ urlpatterns = patterns('',
        url(r'^display_services/$',views.display_services, name='display_services'),
        url(r'^delete_services/$',views.delete_services, name='delete_services'),
        url(r'^view_bill/$', views.view_bill, name='view_bill'),
-       #url(r'market_rep/$', views.market_rep, name='market_rep'),
+       url(r'^market_rep/$', views.market_rep, name='market_rep'),
 )

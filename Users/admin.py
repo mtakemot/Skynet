@@ -22,5 +22,5 @@ class CreatePackageAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(UserProfile, UserAdmin)
-#admin.site.register(Service,CreatePackageAdmin)
+admin.site.register(Service,CreatePackageAdmin)
 

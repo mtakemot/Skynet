@@ -96,6 +96,12 @@ class BillForm(forms.ModelForm):
         model = Service
         fields = ('name', 'description', 'price', 'term_fee')
 
+class BundleForm(forms.ModelForm):
+    bundles = forms.CharField(max_length=120, label="Current Bundles")
+    class Meta:
+        model = Bundle
+        fields = ('name', 'description', 'price', 'term_fee')
+
 class DisplayForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")
     class Meta:

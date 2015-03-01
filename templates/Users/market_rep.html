@@ -27,9 +27,10 @@
 
         {% endfor %}<br/>
         </table>
-        <input type="submit" name="submit" value="Delete" /><br/><br/><br/>
+
+        <input type="submit" name="submit" value="Delete Service" /><br/><br/><br/>
         <table border="1" width="25%">
-            <tr><th>Create Service</th><th>Price</th></tr>
+            <tr><th>Create Service</th><th></th></tr>
             <tr><td>
             Service Name: </td><td><input type="text" name="name" value="" size="50" /></td>
             </tr>
@@ -46,5 +47,61 @@
         <input type="submit" name="submit" value="Create Service" />
         <li><a href="/Users/market_rep/">LINK</a></li>
     </form>
+
+    <form id="bundle_form" method="post" action="/Users/market_rep/">
+        <!--
+        <input type="radio" name="package" value="package 1">Package 1<br>
+        <input type="radio" name="package" value="package 2">Package 2<br>
+        <input type="radio" name="package" value="package 3">Package 3<br>
+        <input type="radio" name="package" value="package 4">Package 4<br>
+        <input type="radio" name="package" value="package 5">Package 5<br>
+        <input type="submit" name="submit" value="Purchase" />
+        -->
+        {% csrf_token %}
+        <table border="1" width="50%">
+             <tr><th>Bundle</th><th>Services</th><th>Price</th></tr>
+
+        {% for bundle in bundle_form%}
+           <tr><td><input type = "radio" name = "bundle" value="{{ bundle.name }}">
+            {{bundle.name}}</td>
+               <td> {{bundle.get_services }}</td>
+           <td>${{ bundle.price }}</td></tr>
+
+        {% endfor %}<br/>
+        </table>
+
+        <input type="submit" name="submit" value="Delete Bundle" /><br/><br/><br/>
+
+        <table border="1" width="25%">
+            <tr><th>Create Bundle</th><th></th></tr>
+            <tr><td>
+            Bundle Name: </td><td><input type="text" name="name" value="" size="50" /></td>
+            </tr>
+            <tr><td>
+            Description: </td><td><input type="text" name="description" value="" size="50" /></td>
+            </tr>
+            <tr><td>
+            Price: </td> <td><input type="number" name="price" value="" min="1" size="50" /></td>
+            </tr>
+            <tr><td>
+            Term Fee: </td><td><input type="number" name="term" value="" min="1" size="50" /></td>
+            </tr>
+            <!--<tr><td>
+                Services:</td><td><!--<input types="checkbox" name="bservice" value=""></td>
+            </tr>
+            -->
+        </table><br/>
+        Services to add:
+        <br/>
+        {% for service in service_form%}
+           <tr><td><input type = "checkbox" name = "bservice" value="{{ service.name }}">
+            {{service.name}}</td></tr>
+
+        {% endfor %}<br/><br/>
+        <input type="submit" name="submit" value="Create Bundle" />
+        <li><a href="/Users/market_rep/">LINK</a></li><br/><br/>
+    </form>
+
+
 </body>
 </html>

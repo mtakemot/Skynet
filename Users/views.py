@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm
-from Packages.models import Service
+from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm
+from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -377,11 +377,21 @@ def market_rep(request):
     print(current_user.is_Market)
     service_form = DisplayForm()
     service_form.services = Service.objects.all()
+    bundle_form = ServiceForm()
+    bundle_form.bundle_services = Bundle.objects.all()
+    #bundle_form = BundleServForm()
+    #bundle_form.bundle_services = Service.objects.all()
 
     if current_user.is_Market == False:
         return HttpResponseRedirect('/Users/')
 
     if request.method == 'POST':
+        #sform = ServiceForm(request.POST)
+        #bform = BundleForm(data=request.POST)
+       # print("TEST FORM VALID: ", sform.is_valid())
+       # if sform.is_valid():
+            #print("sukkkkkkaaaa")
+
         button = request.POST['submit']
 
         if button == 'Create Service':
@@ -398,17 +408,30 @@ def market_rep(request):
             newService = Service(name=service_name,description=service_description,
                                  price=service_price,term_fee=service_term)
             #try:
-              #  new_service = request.POST['service']
+                #new_service = request.POST['service']
             #except MultiValueDictKeyError:
-               # return HttpResponseRedirect("/Users/market_rep/")
+                #return HttpResponseRedirect("/Users/market_rep/")
 
-            Service.save(newService)
+            #Service.objects.add(newService)
+            newService.save()
             service_form = DisplayForm()
             service_form.services = Service.objects.all()
+            bundle_form = ServiceForm()
+            bundle_form.bundle_services = Bundle.objects.all()
 
 
-            return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all()})
-        elif button == 'Delete':
+            #bundle_form.name = bundle_name
+            #bundle_form.description = bundle_description
+            #bundle_form.price = bundle_price
+            #bundle_form.term = bundle_term
+
+
+
+            return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+                                                         'bundle_form': bundle_form.bundle_services.all()})
+
+
+        elif button == 'Delete Service':
 
             #from our HTML, the button selected is passed here in terms of the Service
             #object's name field from the html code: value="{{service.name}}"
@@ -436,11 +459,83 @@ def market_rep(request):
             current_user = UserProfile.objects.get(user=request.user)
             current_user.save()
 
-            current_user.services.add(package)
+            #current_user.services.add(package)
             return HttpResponseRedirect('/Users/market_rep')
+
+        elif button == 'Delete Bundle':
+            print("deleting bundle")
+            try:
+                bundle_name = request.POST['bundle']
+            except MultiValueDictKeyError:
+                return HttpResponseRedirect("/Users/market_rep/")
+            print("deleting bundle: ", bundle_name)
+            for bundle in Bundle.objects.all():
+                if bundle.name == bundle_name:
+                    package = bundle
+                    print(package)
+                    Bundle.objects.filter(name=bundle_name).delete()
+                    print("deleting bundle object with name: ", bundle_name)
+
+            current_user = UserProfile.objects.get(user=request.user)
+            current_user.save()
+            return HttpResponseRedirect('/Users/market_rep')
+
+        elif button == 'Create Bundle':
+            bundle_form2=BundleServForm()
+            print("testCreateBundle")
+            bundle_name = request.POST['name']
+            bundle_description = request.POST['description']
+            bundle_price = request.POST['price']
+            bundle_term = request.POST['term']
+            print(bundle_name)
+
+            bundle_form2.bundle_services = request.POST.getlist('bservice')
+            #bundle_form.bundle_services = bundle_form2.bundle_services
+            #for x in bundle_form2.bundle_services:
+                #print(x)
+            #print(bundle_form2.bundle_services)
+
+            #list = Service.objects.all()
+
+            newBundle = Bundle(name = bundle_name, description=bundle_description,price=bundle_price,
+                               term_fee=bundle_term,)
+            #bundle = bundle_form.save(commit=False)
+            #service = service_form.save(commit=False)
+            newBundle.save()
+
+            for x in Service.objects.all():
+                for y in bundle_form2.bundle_services:
+                    #print(x.name)
+                    #print(y)
+                    if x.name == y:
+                        #bundle.save()
+                        print("match")
+                        print(x.name)
+                        print(y)
+                        #bundle.bundle_services.add(x)
+                        newBundle.bundle_services.add(x)
+                        #bundle_form.
+            #newBundle.save()
+            service_form = DisplayForm()
+            service_form.services = Service.objects.all()
+            bundle_form = ServiceForm()
+            bundle_form.bundle_services = Bundle.objects.all()
+
+
+            #bundle_form.name = bundle_name
+            #bundle_form.description = bundle_description
+            #bundle_form.price = bundle_price
+            #bundle_form.term = bundle_term
+
+
+
+            return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+                                                         'bundle_form': bundle_form.bundle_services.all()})
     else:
 
-        return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all()})
+        return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+                                                         'bundle_form': bundle_form.bundle_services.all()})
+                                                         #.bundle_services.all()})
 
 def check_permission(UserProfile):
     if UserProfile.is_Market:

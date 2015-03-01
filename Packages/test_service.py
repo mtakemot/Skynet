@@ -4,7 +4,6 @@ __author__ = 'T4kMoDe'
 
 
 class TestService(TestCase):
-    print("hi")
     def test_service(self):
         test = Service(name='package 2')
         print (test.name)
@@ -18,6 +17,9 @@ class TestService(TestCase):
         print (test.price)
         self.assertEquals(test.price,69.99)
 
+
+
+    def test_service_termination(self):
         test = Service(term_fee=199.99)
         print (test.term_fee)
         self.assertEquals(test.term_fee,199.99)
@@ -26,3 +28,4 @@ class TestService(TestCase):
     def test_fail(self):
         self.fail()
     pass
+

@@ -319,10 +319,14 @@ def view_bill(request):
 
     bill_form = BillForm()
     bill_form.services = current_user.services.all()
+    bundle_form = BundleForm()
+    bundle_form.bundles = current_user.bundles.all()
     cost = 0
     for service in current_user.services.all():
         cost += service.price
-    return render(request, 'Users/view_bill.html', {'display_services': bill_form.services, 'total':cost})
+    for bundle in current_user.bundles.all():
+        cost += bundle.price
+    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles, 'display_services': bill_form.services, 'total':cost})
 
 @login_required
 def delete_services(request):
@@ -479,6 +483,55 @@ def market_rep(request):
             current_user = UserProfile.objects.get(user=request.user)
             current_user.save()
             return HttpResponseRedirect('/Users/market_rep')
+
+        elif button == 'Add Bundle Service':
+            try:
+                bundle_name = request.POST['bundle']
+            except MultiValueDictKeyError:
+                return HttpResponseRedirect("/Users/market_rep/")
+            for bundle in Bundle.objects.all():
+                if bundle.name == bundle_name:
+                    #package = bundle
+                    bundle_form2 = BundleServForm()
+                    bundle_form2.bundle_services = request.POST.getlist('bservice')
+                    newBundle = Bundle.objects.get(name=bundle_name)
+                    for x in Service.objects.all():
+                        for y in bundle_form2.bundle_services:
+                            if x.name == y:
+                                print (x.name)
+                                newBundle.bundle_services.add(x)
+
+
+            for x in Service.objects.all():
+                for y in bundle_form2.bundle_services:
+                        #print(x.name)
+                        #print(y)
+                    if x.name == y:
+                            #bundle.save()
+                        print("match")
+                        print(x.name)
+                        print(y)
+                        #bundle.bundle_services.add(x)
+                        newBundle.bundle_services.add(x)
+                        #bundle_form.
+                        #newBundle.save()
+            service_form = DisplayForm()
+            service_form.services = Service.objects.all()
+            bundle_form = ServiceForm()
+            bundle_form.bundle_services = Bundle.objects.all()
+
+
+            #bundle_form.name = bundle_name
+            #bundle_form.description = bundle_description
+            #bundle_form.price = bundle_price
+            #bundle_form.term = bundle_term
+
+
+
+            return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+                                                             'bundle_form': bundle_form.bundle_services.all()})
+            # Bundle.objects.filter(name=bundle_name).add()
+            #print("deleting bundle object with name: ", bundle_name)
 
         elif button == 'Create Bundle':
             bundle_form2=BundleServForm()

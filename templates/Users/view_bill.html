@@ -32,6 +32,14 @@
     {% endfor %}
     </table>
     </form>
+    <form id="display_bundles" method="get" action="/Users/display_services/">
+        <table class="center" border="1" style="width:25%">
+            <tr><th>Bundle</th><th>Price</th><th>Termination Fee</th></tr>
+        {% for bundle in display_bundles %}
+            <tr><td>{{bundle}}</td> <td>${{ bundle.price }}</td> <td>${{bundle.term_fee}}</td></tr>
+        {% endfor %}
+        </table>
+    </form>
     <p>Total is: ${{ total }}</p>
 
 </body>

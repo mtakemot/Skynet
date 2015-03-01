@@ -32,5 +32,5 @@ class CreateBundleAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(UserProfile, UserAdmin)
-admin.site.register(Service,CreatePackageAdmin)
-admin.site.register(Bundle, CreateBundleAdmin)
+#admin.site.register(Service,CreatePackageAdmin)
+#admin.site.register(Bundle, CreateBundleAdmin)

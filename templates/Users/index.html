@@ -60,7 +60,7 @@
                     <li><a href="/Users/register/">Register</a></li>
                     <li><a href="/Users/login/">Login</a></li>
                     <li><a href="#">Services</a></li>
-                    <li><a href="#">Bundles</a></li>
+                    <li><a href="/Users/add_category/">New Category</a></li>
                     <li><a href="#">Support</a></li>
 
                     <li class="dropdown">
@@ -87,21 +87,32 @@
 
           {% if categories %}
         <!--this will probably be an area to list services/advertise etc-->
-            <ul>
+            <div class = "category" >
+
+            <ul class = "nav">
                 {% for category in categories %}
                 <li><a href="/Users/category/{{ category.slug }}">{{ category.name }}</a></li>
                 {% endfor %}
+
             </ul>
-        {% else %}s
-            <strong>There are no categories present.</strong>
-        {% endif %}
-        <a href="/Users/about/">About</a><br />
+
+        {% else %}
+
+                <strong>There are no categories present.</strong>
+
+                {% endif %}
+
+                <!---<a href="/Users/about/">About</a><br /> ---->
         <!--CREATE VIEW AND LINK WITH LIST OF SERVICES-->
-        <a href="/Users/add_category/">Add a New Category</a><br />
-
-        <img src ="{% static "images/logo.jpg" %}" alt = "Logo" />
-
+        <div class = "new_cat">
+            <a href="/Users/add_category/">Add a New Category</a><br />
         </div>
+            <img src ="{% static "images/logo.jpg" %}" alt = "Logo" />
+
+            </div>
+        </div>
+
+
     </body>
 
 </html>

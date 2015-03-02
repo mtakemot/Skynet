@@ -5,7 +5,15 @@
 
     <head>
         <title>Users</title>
-        <style>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'index.css' %}">
+        <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'index.js' %}"></script>
+
+        <!---<style>
             body{
                 text-align: center;
             }
@@ -16,10 +24,11 @@
             td{
                 padding: 5px;
             }
-        </style>
+        </style> --->
     </head>
 
     <body>
+        <div class = "index">
         {% if user.is_authenticated %}
         <h1>Welcome back to Skynet, {{ user.username }}!</h1>
             <table class = "center" border="1">
@@ -31,14 +40,51 @@
         <td><a href="/Users/logout/">Logout</a></td>
             </tr>
             </table>
+
         {% else %}
-        <h1>Welcome to Skynet!</h1>
+
+        <!--<h1>Welcome to Skynet!</h1>
             <table class="center" border="1">
         <tr><td><a href="/Users/register/">New Customers Register Here</a></td>
         <td><a href="/Users/login/">Returning Customers Login Here</a></td>
             </tr>
-            </table>
+            </table> -->
+
+        <div class = "new_user" >
+                <div class = "container">
+                <a href ="#" class="logo-icon">
+                    <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+                </a>
+
+                <ul class="menu">
+                    <li><a href="/Users/register/">Register</a></li>
+                    <li><a href="/Users/login/">Login</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Bundles</a></li>
+                    <li><a href="#">Support</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">More <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">About Us</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                </div>
+            </div>
+
+            <div class = "intro">
+                <div class = "container">
+                    <h1>Welcome to Skynet</h1>
+                    <p>Connecting People, Connecting the World</p>
+                    <a href="#">Learn More</a>
+                </div>
+            </div>
+
+
         {% endif %}
+
           {% if categories %}
         <!--this will probably be an area to list services/advertise etc-->
             <ul>
@@ -54,6 +100,8 @@
         <a href="/Users/add_category/">Add a New Category</a><br />
 
         <img src ="{% static "images/logo.jpg" %}" alt = "Logo" />
+
+        </div>
     </body>
 
 </html>

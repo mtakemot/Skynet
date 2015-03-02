@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-#from django.conf.urls import settings
+from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
 
@@ -13,4 +13,4 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^Users/', include('Users.urls')), # add this new tuple
-)
+)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

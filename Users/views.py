@@ -247,10 +247,13 @@ def add_package(request):
     #if the request on this page coming after loading and from a user input:
     current_user = UserProfile.objects.get(user=request.user)
 
+
     #only allow access to customers, redirect market rep and cust serv reps
     redirect = check_permission(current_user)
+    print(redirect)
     if redirect!=False:
         return redirect
+
 
     if request.method == 'POST':
         #from our HTML, the button selected is passed here in terms of the Service
@@ -585,7 +588,7 @@ def check_permission(UserProfile):
         return HttpResponseRedirect('/Users/login')
 
     else:
-        return HttpResponseRedirect('/Users/')
+        return False
 
 #def validate_views(obj, ):
     #if render_loc!='':

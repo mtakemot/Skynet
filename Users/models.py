@@ -42,6 +42,7 @@ class UserProfile(models.Model):
     services = models.ManyToManyField(serviceModels, blank=True)
     bundles = models.ManyToManyField(bundleModels, blank=True)
     is_Market = models.BooleanField(default=False)
+    is_Service = models.BooleanField(default=False)
 
 
     def get_services(self):

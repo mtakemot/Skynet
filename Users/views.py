@@ -229,12 +229,12 @@ def restricted(request):
 
 @login_required
 def user_logout(request):
-    current_user = UserProfile.objects.get(user=request.user)
+    #current_user = UserProfile.objects.get(user=request.user)
 
     #only allow access to customers, redirect market rep and cust serv reps
-    redirect = check_permission(current_user)
-    if redirect!=False:
-        return redirect
+    #redirect = check_permission(current_user)
+    #if redirect!=False:
+    #   return redirect
      # Since we know the user is logged in, we can now just log them out.
     logout(request)
 
@@ -382,23 +382,14 @@ def market_rep(request):
     current_user = UserProfile.objects.get(user=request.user)
 
     #only allow access to customers, redirect market rep and cust serv reps
-    redirect = check_permission(current_user)
-    if redirect!=False:
-        return redirect
+    if current_user.is_Market == False:
+        return check_permission(current_user)
 
     print(current_user.is_Market)
     service_form = DisplayForm()
     service_form.services = Service.objects.all()
     bundle_form = ServiceForm()
     bundle_form.bundle_services = Bundle.objects.all()
-
-    permission = check_permission(current_user)
-
-
-    if permission == False:
-        return HttpResponseRedirect('/Users/')
-
-
 
     if request.method == 'POST':
 
@@ -571,12 +562,30 @@ def market_rep(request):
         return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
                                                          'bundle_form': bundle_form.bundle_services.all()})
                                                          #.bundle_services.all()})
+def cust_serv(request):
+    current_user = UserProfile.objects.get(user=request.user)
+    user_form = UserProfileForm()
+    service_form = DisplayForm()
+    service_form.services = Service.objects.all()
+    bundle_form = ServiceForm()
+    bundle_form.bundle_services = Bundle.objects.all()
+
+    #only allow access to customers, redirect market rep and cust serv reps
+    if current_user.is_Service == False:
+        return check_permission(current_user)
+
+    return render(request, 'Users')
 
 def check_permission(UserProfile):
+
     if UserProfile.is_Market:
         return HttpResponseRedirect('/Users/market_rep')
+
+    elif UserProfile.is_Service:
+        return HttpResponseRedirect('/Users/login')
+
     else:
-        return False
+        return HttpResponseRedirect('/Users/')
 
 #def validate_views(obj, ):
     #if render_loc!='':

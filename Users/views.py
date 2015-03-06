@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
 # Create your views here.
+from django.contrib.auth.models import User
 
 
 
@@ -33,6 +34,8 @@ def index(request):
         print("Your new threshold value: ", value)
 
         current_user = UserProfile.objects.get(user=request.user)
+        print("testing last login date", current_user.user.last_login)
+
         current_user.threshold = value
         print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
     if request.method == 'GET':
@@ -258,7 +261,7 @@ def user_logout(request):
     return HttpResponseRedirect('/Users/')
 
 @login_required
-def add_package(request):
+def add_services(request):
     #if the request on this page coming after loading and from a user input:
     current_user = UserProfile.objects.get(user=request.user)
 
@@ -276,13 +279,13 @@ def add_package(request):
         #this will just copy the name locally so that we can iterate through the
         #Service database and find the object with matching name.
         try:
-            package_name = request.POST['service']
+            service_name = request.POST['service']
         except MultiValueDictKeyError:
-            return HttpResponseRedirect("/Users/add_package/")
+            return HttpResponseRedirect("/Users/add_services/")
 
         for services in Service.objects.all():
-            if services.name == package_name:
-                package = services
+            if services.name == service_name:
+                service = services
 
         redirect = check_permission(current_user)
         if redirect:
@@ -290,7 +293,8 @@ def add_package(request):
 
         current_user.save()
 
-        current_user.services.add(package)
+        current_user.services.add(service)
+        current_user.services.balance = service.price
 
         print("HEHE")
         print (current_user.user)
@@ -307,7 +311,7 @@ def add_package(request):
         service_form = DisplayForm()
         #passing to the HTML ALL the contents in the Service database
         service_form.services = Service.objects.all()
-        return render(request, 'Users/add_package.html', {'service_form': service_form.services.all()})
+        return render(request, 'Users/add_services.html', {'service_form': service_form.services.all()})
 
 @login_required
 def display_services(request):

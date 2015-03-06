@@ -3,6 +3,9 @@ from django.contrib.auth.models import User, UserManager
 from django.template.defaultfilters import slugify
 from Packages.models import Service as serviceModels
 from Packages.models import Bundle as bundleModels
+from Rule.models import balance_check
+
+
 # Create your models here.
 
 
@@ -52,6 +55,19 @@ class UserProfile(models.Model):
 
     def get_services(self):
         return "\n".join([p.name for p in self.services.all()])
+
+    # override save, b/c any change in a field will always save in DB using Django framework.
+    # override so that before the actual userprofileobject.save() occurs,
+    # check balance vs threshold and use rule obj method to verify if a notification
+    # needs to be sent or not. Then, call userprofileobject.save()
+    def save(self):
+        balance_check(self)
+
+        super(UserProfile,self).save()
+        #super(UserProfile, self).save(force_insert=True, force_update=False)
+
+
+
 
     #def check_permission(self):
         #if self.is_Market:

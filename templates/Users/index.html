@@ -37,10 +37,23 @@
             <td><a href="/Users/add_package/"> Add a Service</a></td>
             <td><a href="/Users/delete_services/"> Remove a Service</a></td>
             <td><a href="/Users/view_bill"> View Bill</a></td>
+            <td><a href="">Set courtesy notification threshold</a></td>
         <td><a href="/Users/logout/">Logout</a></td>
             </tr>
             </table>
 
+        <form id="" method="post" action="/Users/">
+        {% csrf_token %}
+            <table border="1" width="25%">
+                <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
+                <tr><td align="right">Threshold Value: </td></tr>
+                <tr><td align="right">
+                        <input type="number" name="maxVal" onchange="setTwoNumberDecimal" min="0.00" max="999999.99" step="0.25" value="0.00"/>
+                    </td>
+                </tr>
+                <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
+            </table>
+        </form>
         {% else %}
 
         <!--<h1>Welcome to Skynet!</h1>

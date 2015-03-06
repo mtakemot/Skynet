@@ -26,6 +26,19 @@ def index(request):
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
 
+    #adding requirement 10, autoemail. We need to allow user to set a threshold.
+    if request.method == 'POST':
+        print("ASLKDJHSLAKDJAS:LDKJASDLASJDL")
+        value = request.POST['maxVal']
+        print("Your new threshold value: ", value)
+
+        current_user = UserProfile.objects.get(user=request.user)
+        current_user.threshold = value
+        print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
+    if request.method == 'GET':
+        print("loading index.html from GET")
+
+
 
 
     return render(request, 'Users/index.html', context_dict)
@@ -199,6 +212,8 @@ def user_login(request):
 
                 if current_user.is_Market:
                     return HttpResponseRedirect('/Users/market_rep')
+                #if current_user.is_Service:
+                    #return HttpResponseRedirect('/Users/cust_serv')
 
                 else:
                     return HttpResponseRedirect('/Users/')

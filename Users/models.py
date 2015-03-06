@@ -41,6 +41,11 @@ class UserProfile(models.Model):
     userEmail = models.CharField(max_length=45, blank=True) #user email
     services = models.ManyToManyField(serviceModels, blank=True)
     bundles = models.ManyToManyField(bundleModels, blank=True)
+
+    #Follow is for customer's current balance, and balance threshold (for notifications)
+    balance = models.DecimalField(max_digits=8, default=0.00, decimal_places=2)
+    threshold = models.DecimalField(max_digits=8, default=0.00, decimal_places=2)
+
     is_Market = models.BooleanField(default=False)
     is_Service = models.BooleanField(default=False)
 

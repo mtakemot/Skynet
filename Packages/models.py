@@ -6,7 +6,7 @@ class Service(models.Model):
     name = models.CharField(max_length=128, unique=True)
     description = models.CharField(max_length=250)
     price = models.IntegerField(default=0)
-    term_fee = models.IntegerField(default=0)
+    term_fee = models.IntegerField(default=150)
 
     def __str__(self):
         return self.name
@@ -20,8 +20,15 @@ class Bundle(models.Model):
 
     def __str__(self):
         return self.name
+
     def get_services(self):
         return ", ".join([p.name for p in self.bundle_services.all()])
+
+    #override save() so that we can update price of bundle with changing service content of bundle
+    def save(self):
+
+
+        super(Bundle,self).save()
 
 #class AllService(models.Model):
 #class Package(models.Model):

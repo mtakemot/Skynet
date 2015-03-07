@@ -30,28 +30,30 @@
     <body>
         <div class = "index">
         {% if user.is_authenticated %}
-
-            <div class = "login" >
-                <div class = "login_m"></div>
-                <a href ="/Users" class="logo-icon">
-                    <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
-                </a>
-
-                </div>
-
         <h1>Welcome back to Skynet, {{ user.username }}!</h1>
             <table class = "center" border="1">
         <tr><td><a href="/Users/restricted/">Restricted Page</a></td>
         <td><a href="/Users/display_services/">Click here to see your active subscription plans</a></td>
-            <td><a href="/Users/add_package/"> Add a Service</a></td>
+            <td><a href="/Users/add_services/"> Add a Service</a></td>
             <td><a href="/Users/delete_services/"> Remove a Service</a></td>
             <td><a href="/Users/view_bill"> View Bill</a></td>
+            <td><a href="">Set courtesy notification threshold</a></td>
         <td><a href="/Users/logout/">Logout</a></td>
             </tr>
             </table>
 
-                </div>
-
+        <form id="user_form" method="post" action="/Users/">
+        {% csrf_token %}
+            <table border="1" width="25%">
+                <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
+                <tr><td align="right">Threshold Value: </td></tr>
+                <tr><td align="right">
+                        <input type="number" name="maxVal"  min="0" max="99999" value=""/>
+                    </td>
+                </tr>
+                <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
+            </table>
+        </form>
         {% else %}
 
         <!--<h1>Welcome to Skynet!</h1>
@@ -63,7 +65,7 @@
 
         <div class = "new_user" >
                 <div class = "container">
-                <a href ="/Users" class="logo-icon">
+                <a href ="#" class="logo-icon">
                     <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
                 </a>
 
@@ -71,7 +73,7 @@
                     <li><a href="/Users/register/">Register</a></li>
                     <li><a href="/Users/login/">Login</a></li>
                     <li><a href="#">Services</a></li>
-                    <li><a href="/Users/add_category/">New Category</a></li>
+                    <!---<li><a href="/Users/add_category/">New Category</a></li>--->
                     <li><a href="#">Support</a></li>
 
                     <li class="dropdown">
@@ -96,9 +98,10 @@
 
         {% endif %}
 
+        <div class = "category" >
           {% if categories %}
         <!--this will probably be an area to list services/advertise etc-->
-            <div class = "category" >
+
 
             <ul class = "nav">
                 {% for category in categories %}
@@ -118,7 +121,7 @@
         <div class = "new_cat">
             <a href="/Users/add_category/">Add a New Category</a><br />
         </div>
-            <img src ="{% static "images/logo.jpg" %}" alt = "Logo" />
+            <!--<img src ="{% static "images/logo.jpg" %}" alt = "Logo" />-->
 
             </div>
         </div>

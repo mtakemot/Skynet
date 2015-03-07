@@ -99,6 +99,10 @@
     color: #00b0ff;
 }
 
+.category {
+    display:none;
+    visibility: hidden;
+}
 strong{
     font-size: 15px;
     font-family: 'Open Sans', sans-serif;
@@ -110,6 +114,7 @@ strong{
     list-style-type: none;
     margin: 0px;
     padding: 0px;
+    display: none;
 }
 
 a:link {

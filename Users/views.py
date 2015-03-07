@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
 # Create your views here.
+from django.contrib.auth.models import User
 
 
 
@@ -21,14 +22,40 @@ def index(request):
     # Place the list in our context_dict dictionary which will be passed to the template engine.
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {'categories': category_list}
+    user_form = UserProfileForm()
+
+    #profile_form = UserProfileForm(data=request.POST)
 
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
 
+    #adding requirement 10, autoemail. We need to allow user to set a threshold.
+    if request.method == 'POST':
 
+        user_form = UserProfileForm(data=request.POST)
+        #print("user_form first: ", user_form)
 
-    return render(request, 'Users/index.html', context_dict)
+        value = request.POST['maxVal']
+        #not sure what it means BUT,
+        current_user = UserProfile.objects.get(user=request.user)
+        print(current_user.username)
+        print("testing last login date", current_user.user.last_login)
+        temp = int(value)
+        current_user.threshold = temp
+        current_user.save()
+        print("threshold in DB is: " ,current_user.threshold)
+        # print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
+        # if current_user.balance > current_user.threshold:
+        #     print("comparing int str??")
+
+    if request.method == 'GET':
+        print("loading index.html from GET")
+
+    # return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+    #                                                      'bundle_form': bundle_form.bundle_services.all()})
+
+    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form})
 
 def about(request):
     return HttpResponse("Skynet says this is the about page for users <br/> <a href = '/Users/'>Back to Users</a>")
@@ -199,6 +226,8 @@ def user_login(request):
 
                 if current_user.is_Market:
                     return HttpResponseRedirect('/Users/market_rep')
+                #if current_user.is_Service:
+                    #return HttpResponseRedirect('/Users/cust_serv')
 
                 else:
                     return HttpResponseRedirect('/Users/')
@@ -229,12 +258,12 @@ def restricted(request):
 
 @login_required
 def user_logout(request):
-    current_user = UserProfile.objects.get(user=request.user)
+    #current_user = UserProfile.objects.get(user=request.user)
 
     #only allow access to customers, redirect market rep and cust serv reps
-    redirect = check_permission(current_user)
-    if redirect!=False:
-        return redirect
+    #redirect = check_permission(current_user)
+    #if redirect!=False:
+    #   return redirect
      # Since we know the user is logged in, we can now just log them out.
     logout(request)
 
@@ -243,14 +272,17 @@ def user_logout(request):
     return HttpResponseRedirect('/Users/')
 
 @login_required
-def add_package(request):
+def add_services(request):
     #if the request on this page coming after loading and from a user input:
     current_user = UserProfile.objects.get(user=request.user)
 
+
     #only allow access to customers, redirect market rep and cust serv reps
     redirect = check_permission(current_user)
+    print(redirect)
     if redirect!=False:
         return redirect
+
 
     if request.method == 'POST':
         #from our HTML, the button selected is passed here in terms of the Service
@@ -258,21 +290,41 @@ def add_package(request):
         #this will just copy the name locally so that we can iterate through the
         #Service database and find the object with matching name.
         try:
-            package_name = request.POST['service']
+            service_name = request.POST['service']
         except MultiValueDictKeyError:
-            return HttpResponseRedirect("/Users/add_package/")
+            return HttpResponseRedirect("/Users/add_services/")
+
+        # for services in Service.objects.all():
+        #     if services.name == service_name:
+        #         current_user.balance+=services.price
+        #         current_user.services.add(services)
+        #         current_user.save()
+        #     else:
+        #         print("invalid service. Cannot add to your account")
+
+        # if the service exists in user package, render page
+        for services in current_user.services.all():
+            if services.name == service_name:
+                print("Can't add duplicate services")
+                return HttpResponseRedirect("/Users/add_services/")
 
         for services in Service.objects.all():
-            if services.name == package_name:
-                package = services
+            if services.name == service_name:
+                current_user.balance+=services.price
+                current_user.services.add(services)
+                current_user.save()
+                print ("added service successfully")
 
-        redirect = check_permission(current_user)
-        if redirect:
-            return redirect
+
+
+        # redirect = check_permission(current_user)
+        # if redirect:
+        #     return redirect
 
         current_user.save()
 
-        current_user.services.add(package)
+        # current_user.services.add(service)
+        # current_user.services.balance = service.price
 
         print("HEHE")
         print (current_user.user)
@@ -289,7 +341,7 @@ def add_package(request):
         service_form = DisplayForm()
         #passing to the HTML ALL the contents in the Service database
         service_form.services = Service.objects.all()
-        return render(request, 'Users/add_package.html', {'service_form': service_form.services.all()})
+        return render(request, 'Users/add_services.html', {'service_form': service_form.services.all()})
 
 @login_required
 def display_services(request):
@@ -334,7 +386,7 @@ def view_bill(request):
         cost += service.price
     for bundle in current_user.bundles.all():
         cost += bundle.price
-    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles, 'display_services': bill_form.services, 'total':cost})
+    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles, 'display_services': bill_form.services, 'total':current_user.balance})
 
 @login_required
 def delete_services(request):
@@ -361,6 +413,7 @@ def delete_services(request):
         for service in current_user.services.all():
             if (service.name == newPackage.name):
                 current_user.services.remove(service)
+                current_user.balance-=service.price
                 current_user.save()
 
 
@@ -382,23 +435,14 @@ def market_rep(request):
     current_user = UserProfile.objects.get(user=request.user)
 
     #only allow access to customers, redirect market rep and cust serv reps
-    redirect = check_permission(current_user)
-    if redirect!=False:
-        return redirect
+    if current_user.is_Market == False:
+        return check_permission(current_user)
 
     print(current_user.is_Market)
     service_form = DisplayForm()
     service_form.services = Service.objects.all()
     bundle_form = ServiceForm()
     bundle_form.bundle_services = Bundle.objects.all()
-
-    permission = check_permission(current_user)
-
-
-    if permission == False:
-        return HttpResponseRedirect('/Users/')
-
-
 
     if request.method == 'POST':
 
@@ -571,10 +615,28 @@ def market_rep(request):
         return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
                                                          'bundle_form': bundle_form.bundle_services.all()})
                                                          #.bundle_services.all()})
+def cust_serv(request):
+    current_user = UserProfile.objects.get(user=request.user)
+    user_form = UserProfileForm()
+    service_form = DisplayForm()
+    service_form.services = Service.objects.all()
+    bundle_form = ServiceForm()
+    bundle_form.bundle_services = Bundle.objects.all()
+
+    #only allow access to customers, redirect market rep and cust serv reps
+    if current_user.is_Service == False:
+        return check_permission(current_user)
+
+    return render(request, 'Users')
 
 def check_permission(UserProfile):
+
     if UserProfile.is_Market:
         return HttpResponseRedirect('/Users/market_rep')
+
+    elif UserProfile.is_Service:
+        return HttpResponseRedirect('/Users/login')
+
     else:
         return False
 

@@ -1,10 +1,23 @@
 <!DOCTYPE html>
+{% load staticfiles %}
+
 <html>
     <head>
-        <title>Skynet</title>
+        <title>Register</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'register.css' %}">
+        <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'register.js' %}"></script>
+
     </head>
 
     <body>
+
+        <!----
         <h1>Register with Skynet</h1>
 
         {% if registered %}
@@ -22,13 +35,67 @@
 
             <!-- Display each form. The as_p method wraps each element in a paragraph
                  (<p>) element. This ensures each element appears on a new line,
-                 making everything look neater. -->
+                 making everything look neater.
             {{ user_form.as_p }}
             {{ profile_form.as_p }}
 
-            <!-- Provide a button to click to submit the form. -->
+            <!-- Provide a button to click to submit the form.
             <input type="submit" name="submit" value="Register" />
         </form>
         {% endif %}
+        ------->
+
+
+
+
+    <div class="menu">
+
+      <!-- Menu icon -->
+      <div class="icon-close">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="#" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
+        </div>
+
+         <ul>
+             <li><a href="/Users">Back</a></li>
+             <li><a href="/Users/login/">Login</a></li>
+             <li><a href="#">Contact</a></li>
+             <li><a href="#">Support</a></li>
+          </ul>
+
+      </div>
+
+
+      <div class="jumbotron">
+        <div class="icon-menu">
+            <i class="fa fa-bars"></i>
+            Menu
+      </div>
+        <div class="container">
+        <div id="register">
+
+            <form id="user_form" method="post" action="/Users/register/"
+                enctype="multipart/form-data">
+
+                <fieldset class="clearfix">
+
+                {% csrf_token %}
+
+                <p>{{ user_form.as_p }}</p>
+                <p>{{ profile_form.as_p }}</p>
+
+                </fieldset>
+
+                <input type="submit" name="submit" value="Register" />
+
+        </div>
+        </div>
+    </div>
+
     </body>
 </html>

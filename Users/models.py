@@ -46,8 +46,8 @@ class UserProfile(models.Model):
     bundles = models.ManyToManyField(bundleModels, blank=True)
 
     #Follow is for customer's current balance, and balance threshold (for notifications)
-    balance = models.DecimalField(max_digits=8, default=0.00, decimal_places=2)
-    threshold = models.DecimalField(max_digits=8, default=0.00, decimal_places=2)
+    balance = models.IntegerField(max_length=9, default=0)
+    threshold = models.IntegerField(max_length=9, default=0)
 
     is_Market = models.BooleanField(default=False)
     is_Service = models.BooleanField(default=False)

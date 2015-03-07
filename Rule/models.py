@@ -7,7 +7,11 @@ from django.db import models
 def balance_check(self):
 
     if self.balance > self.threshold:
+
             print("BALANCE EXCEEDS THRESHOLD! PAY UP!!")
+    if self.balance < 0:
+        print("@ Rule.models.balance_check: Balance cannot be < 0 ")
+        self.balance = 0
 
 
 def update_bundle(self):

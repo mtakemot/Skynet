@@ -22,6 +22,9 @@ def index(request):
     # Place the list in our context_dict dictionary which will be passed to the template engine.
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {'categories': category_list}
+    user_form = UserProfileForm()
+
+    #profile_form = UserProfileForm(data=request.POST)
 
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
@@ -30,13 +33,18 @@ def index(request):
     #adding requirement 10, autoemail. We need to allow user to set a threshold.
     if request.method == 'POST':
 
+        user_form = UserProfileForm(data=request.POST)
+        #print("user_form first: ", user_form)
+
         value = request.POST['maxVal']
         #not sure what it means BUT,
         current_user = UserProfile.objects.get(user=request.user)
+        print(current_user.username)
         print("testing last login date", current_user.user.last_login)
         temp = int(value)
         current_user.threshold = temp
         current_user.save()
+        print("threshold in DB is: " ,current_user.threshold)
         # print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
         # if current_user.balance > current_user.threshold:
         #     print("comparing int str??")
@@ -44,7 +52,10 @@ def index(request):
     if request.method == 'GET':
         print("loading index.html from GET")
 
-    return render(request, 'Users/index.html', context_dict)
+    # return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+    #                                                      'bundle_form': bundle_form.bundle_services.all()})
+
+    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form})
 
 def about(request):
     return HttpResponse("Skynet says this is the about page for users <br/> <a href = '/Users/'>Back to Users</a>")
@@ -283,18 +294,37 @@ def add_services(request):
         except MultiValueDictKeyError:
             return HttpResponseRedirect("/Users/add_services/")
 
+        # for services in Service.objects.all():
+        #     if services.name == service_name:
+        #         current_user.balance+=services.price
+        #         current_user.services.add(services)
+        #         current_user.save()
+        #     else:
+        #         print("invalid service. Cannot add to your account")
+
+        # if the service exists in user package, render page
+        for services in current_user.services.all():
+            if services.name == service_name:
+                print("Can't add duplicate services")
+                return HttpResponseRedirect("/Users/add_services/")
+
         for services in Service.objects.all():
             if services.name == service_name:
-                service = services
+                current_user.balance+=services.price
+                current_user.services.add(services)
+                current_user.save()
+                print ("added service successfully")
 
-        redirect = check_permission(current_user)
-        if redirect:
-            return redirect
+
+
+        # redirect = check_permission(current_user)
+        # if redirect:
+        #     return redirect
 
         current_user.save()
 
-        current_user.services.add(service)
-        current_user.services.balance = service.price
+        # current_user.services.add(service)
+        # current_user.services.balance = service.price
 
         print("HEHE")
         print (current_user.user)
@@ -356,7 +386,7 @@ def view_bill(request):
         cost += service.price
     for bundle in current_user.bundles.all():
         cost += bundle.price
-    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles, 'display_services': bill_form.services, 'total':cost})
+    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles, 'display_services': bill_form.services, 'total':current_user.balance})
 
 @login_required
 def delete_services(request):
@@ -383,6 +413,7 @@ def delete_services(request):
         for service in current_user.services.all():
             if (service.name == newPackage.name):
                 current_user.services.remove(service)
+                current_user.balance-=service.price
                 current_user.save()
 
 

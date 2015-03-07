@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.mail import send_mail
+from django.conf import settings
+
 
 # Rule Object functions
 
@@ -8,7 +10,10 @@ from django.core.mail import send_mail
 def balance_notify(self):
 
     if self.balance > self.threshold:
-        print("BALANCE EXCEEDS THRESHOLD! PAY UP!!")
+        send_mail('A COURTESY NOTIFICATION FROM SKYNET: ',
+                  'THis is a friendly reminder that your balance has exceeded the threshold value.',
+                   settings.EMAIL_HOST_USER,
+    [self.userEmail], fail_silently=False)
 
 
     if self.balance < 0:

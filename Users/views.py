@@ -29,20 +29,20 @@ def index(request):
 
     #adding requirement 10, autoemail. We need to allow user to set a threshold.
     if request.method == 'POST':
-        print("ASLKDJHSLAKDJAS:LDKJASDLASJDL")
-        value = request.POST['maxVal']
-        print("Your new threshold value: ", value)
 
+        value = request.POST['maxVal']
+        #not sure what it means BUT,
         current_user = UserProfile.objects.get(user=request.user)
         print("testing last login date", current_user.user.last_login)
+        temp = int(value)
+        current_user.threshold = temp
+        current_user.save()
+        # print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
+        # if current_user.balance > current_user.threshold:
+        #     print("comparing int str??")
 
-        current_user.threshold = value
-        print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
     if request.method == 'GET':
         print("loading index.html from GET")
-
-
-
 
     return render(request, 'Users/index.html', context_dict)
 

@@ -30,6 +30,15 @@
     <body>
         <div class = "index">
         {% if user.is_authenticated %}
+
+            <div class = "login" >
+                <div class = "login_m"></div>
+                <a href ="/Users" class="logo-icon">
+                    <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+                </a>
+
+                </div>
+
         <h1>Welcome back to Skynet, {{ user.username }}!</h1>
             <table class = "center" border="1">
         <tr><td><a href="/Users/restricted/">Restricted Page</a></td>
@@ -40,6 +49,8 @@
         <td><a href="/Users/logout/">Logout</a></td>
             </tr>
             </table>
+
+                </div>
 
         {% else %}
 
@@ -52,7 +63,7 @@
 
         <div class = "new_user" >
                 <div class = "container">
-                <a href ="#" class="logo-icon">
+                <a href ="/Users" class="logo-icon">
                     <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
                 </a>
 

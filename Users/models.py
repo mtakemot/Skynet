@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, UserManager
 from django.template.defaultfilters import slugify
 from Packages.models import Service as serviceModels
 from Packages.models import Bundle as bundleModels
-from Rule.models import balance_check
+from Rule.models import balance_notify
 
 
 # Create your models here.
@@ -31,6 +31,8 @@ class Page(models.Model):
     def __str__(self):
         return self.title
 
+#creating an observer design's subject interface:
+
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User)
@@ -41,7 +43,7 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_images', blank=True)
     fname = models.CharField(max_length=20, blank=True, verbose_name="First Name") #user first name
     lname = models.CharField(max_length=20, blank=True, verbose_name="Last Name") #user last name
-    userEmail = models.CharField(max_length=45, blank=True) #user email
+    userEmail = models.CharField(max_length=45, blank=True) #REQUIRED FOR AUTOEMAIL SERVICES
     services = models.ManyToManyField(serviceModels, blank=True)
     bundles = models.ManyToManyField(bundleModels, blank=True)
 
@@ -61,7 +63,7 @@ class UserProfile(models.Model):
     # check balance vs threshold and use rule obj method to verify if a notification
     # needs to be sent or not. Then, call userprofileobject.save()
     def save(self):
-        balance_check(self)
+        balance_notify(self)
 
         super(UserProfile,self).save()
         #super(UserProfile, self).save(force_insert=True, force_update=False)

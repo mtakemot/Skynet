@@ -102,3 +102,18 @@ STATICFILES_DIRS = (
 
 #Login_url
 LOGIN_URL= '/Users/login'
+
+
+
+
+
+
+
+#email notification features below
+
+#for gmail -- google aps
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'takemoto.michio@gmail.com'
+EMAIL_HOST_PASSWORD = 'cse110wi15'
+EMAIL_PORT = 587

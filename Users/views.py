@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from Users.models import Category, Page, UserProfile
+from Users.models import Category, Page, UserProfile, UserFactory
 from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
@@ -133,6 +133,9 @@ def register(request):
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
+
+            #call the userFactory
+
             user.first_name = request.POST['fname']
             user.last_name = request.POST['lname']
             user.email = request.POST['email']
@@ -144,20 +147,23 @@ def register(request):
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             user.set_password(user.password)
-
-
             user.save()
 
+            profile = UserFactory(user)
+
+            # profile = UserFactory(user)
+
+            print("in views, exited factory call")
             # Now sort out the UserProfile instance.
             # Since we need to set the user attribute ourselves, we set commit=False.
             # This delays saving the model until we're ready to avoid integrity problems.
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.username = user
-            profile.fname = user.first_name
-            profile.lname = user.last_name
-            profile.userEmail = user.email
-            profile.website=user.website
+            # profile = profile_form.save(commit=False)
+            # profile.user = user
+            # profile.username = user
+            # profile.fname = user.first_name
+            # profile.lname = user.last_name
+            # profile.userEmail = user.email
+            # profile.website=user.website
             #profile.picture = request.POST['picture']
 
 

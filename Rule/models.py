@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-# RuleSubject Object functions
+# Rule Object functions
 
 
 #rule to check balance vs threshold and to notify via email if necessary
@@ -17,7 +17,7 @@ def balance_notify(self):
 
 
     if self.balance < 0:
-        print("@ RuleSubject.models.balance_notify: Balance cannot be < 0 ")
+        print("@ Rule.models.balance_notify: Balance cannot be < 0 ")
         self.balance = 0
 
 

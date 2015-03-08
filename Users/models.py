@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, UserManager
 from django.template.defaultfilters import slugify
 from Packages.models import Service as serviceModels
 from Packages.models import Bundle as bundleModels
-from RuleSubject.models import balance_notify
+from Rule.models import balance_notify
 
 
 # Create your models here.

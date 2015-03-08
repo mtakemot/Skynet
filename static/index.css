@@ -1,10 +1,63 @@
-.index {
+/*.index {
     width:900px;
     margin: 0 auto;
 }
 
 .container{
     width: 900px;
+}
+
+.container1{
+    width: 900px;
+}
+
+.exist_user {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid #ddd;
+
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+
+    font-size: 18px;
+    padding: 0px;
+
+}
+
+.exist_user .exist_menu{
+    float: right;
+    position: relative;
+    list-style: none;
+    margin-top: 25px;
+}
+
+.exist_menu > li {
+    display: inline;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.exist_menu a{
+    color: #898989;
+}
+.dropdown1-menu {
+    background-color: #fff;
+    list-style-type: none;
+    position: relative;
+    float: right;
+    display: none;
+    font-size: 15px;
+    margin-top: 5px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.dropdown1-menu li a{
+    color: #898989;
+    font-weight: 300;
+    text-align:center;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
 }
 
 .new_user {
@@ -99,6 +152,10 @@
     color: #00b0ff;
 }
 
+.category {
+    display:none;
+    visibility: hidden;
+}
 strong{
     font-size: 15px;
     font-family: 'Open Sans', sans-serif;
@@ -110,8 +167,180 @@ strong{
     list-style-type: none;
     margin: 0px;
     padding: 0px;
+    display: none;
+}
+*/
+/* Initial body */
+body {
+  left: 0;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+    background-image: url('http://hdwallpaper1080.com/wp-content/uploads/best-hd-wallpaper.jpg');
+    -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
 }
 
+/* Initial menu */
+.menu1 {
+  background: #202024 url('http://challenge.gettingfittogether.com/img/23-day-bg.jpg') repeat left top;
+  right: -285px;  /* start off behind the scenes */
+  height: 100%;
+  position: fixed;
+  width: 285px;
+}
+
+/* Basic styling */
+
+.jumbotron1 {
+  /*background-image: url('http://hdwallpaper1080.com/wp-content/uploads/best-hd-wallpaper.jpg');
+  height: 100%;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;*/
+}
+
+.menu1 ul {
+  border-top: 1px solid #636366;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu1 li {
+  border-bottom: 1px solid #636366;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 45px;
+  padding-bottom: 3px;
+  padding-left: 20px;
+  padding-top: 3px;
+}
+
+.menu1 a {
+  color: #fff;
+  font-size: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.icon-close1 {
+  cursor: pointer;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.logo {
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.icon-menu1 {
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  padding-bottom: 25px;
+  padding-left: 25px;
+  padding-top: 25px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.icon-menu1 i {
+  margin-left: 5px;
+}
+
+.description1 {
+  cursor: pointer;
+  padding-left: 30px;
+  padding-top: 30px;
+    font-family: 'Open Sans', sans-serif;
+    color: #fff;
+}
+
+.description1 a{
+    color:#00b0ff;
+}
+
+.menu0 {
+  background: #202024 url('http://challenge.gettingfittogether.com/img/23-day-bg.jpg') repeat left top;
+  right: -285px;  /* start off behind the scenes */
+  height: 100%;
+  position: fixed;
+  width: 285px;
+}
+
+/* Basic styling */
+
+.jumbotron0 {
+  /*background-image: url('http://hdwallpaper1080.com/wp-content/uploads/best-hd-wallpaper.jpg');
+  height: 100%;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;*/
+}
+
+.menu0 ul {
+  border-top: 1px solid #636366;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu0 li {
+  border-bottom: 1px solid #636366;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 45px;
+  padding-bottom: 3px;
+  padding-left: 20px;
+  padding-top: 3px;
+}
+
+.menu0 a {
+  color: #fff;
+  font-size: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.icon-close0 {
+  cursor: pointer;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.icon-menu0 {
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  padding-bottom: 25px;
+  padding-left: 25px;
+  padding-top: 25px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.icon-menu0 i {
+  margin-left: 5px;
+}
+
+.description0 {
+  cursor: pointer;
+  padding-left: 30px;
+  padding-top: 30px;
+    font-family: 'Open Sans', sans-serif;
+    color: #fff;
+}
+
+.description0 a{
+    color:#00b0ff;
+}
 a:link {
     text-decoration: none;
 }

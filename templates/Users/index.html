@@ -8,6 +8,7 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'index.css' %}">
         <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -28,32 +29,60 @@
     </head>
 
     <body>
-        <div class = "index">
-        {% if user.is_authenticated %}
-        <h1>Welcome back to Skynet, {{ user.username }}!</h1>
-            <table class = "center" border="1">
-        <tr><td><a href="/Users/restricted/">Restricted Page</a></td>
-        <td><a href="/Users/display_services/">Click here to see your active subscription plans</a></td>
-            <td><a href="/Users/add_services/"> Add a Service</a></td>
-            <td><a href="/Users/delete_services/"> Remove a Service</a></td>
-            <td><a href="/Users/view_bill"> View Bill</a></td>
-            <td><a href="">Set courtesy notification threshold</a></td>
-        <td><a href="/Users/logout/">Logout</a></td>
-            </tr>
-            </table>
 
-        <form id="user_form" method="post" action="/Users/">
-        {% csrf_token %}
-            <table border="1" width="25%">
-                <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
-                <tr><td align="right">Threshold Value: </td></tr>
-                <tr><td align="right">
+    <!---
+        <div class = "index">
+
+        <div class = "exist_user">
+            <div class = "container1">
+
+                {% if user.is_authenticated %}
+                    <a href ="#" class="logo-icon">
+                        <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+                    </a>
+
+                    <ul class = "exist_menu">
+                        <li><a href="/Users/logout/">Logout</a></li>
+                        <li><a href="/Users/display_services/">View Subscribed Plans</a></li>
+
+                        <li><a href="/Users/view_bill"> View Bill</a></li>
+                        <li><a href="">Set Notification</a></li>
+
+                        <li class="dropdown1">
+                            <a href="#" class="dropdown1-toggle">Service<b class="caret"></b></a>
+                                <ul class="dropdown1-menu">
+                                <li><a href="/Users/add_services/">Add Service</a></li>
+                                <li><a href="/Users/delete_services/">Remove Service</a></li>
+                            </ul>
+                        </li>
+
+                    <!---<table class = "center" border="1">
+                        <tr><td><a href="/Users/restricted/">Restricted Page</a></td>
+                            <td><a href="/Users/display_services/">Click here to see your active subscription plans</a></td>
+                            <td><a href="/Users/add_services/"> Add a Service</a></td>
+                            <td><a href="/Users/delete_services/"> Remove a Service</a></td>
+                            <td><a href="/Users/view_bill"> View Bill</a></td>
+                            <td><a href="">Set courtesy notification threshold</a></td>
+                            <td><a href="/Users/logout/">Logout</a></td>
+                        </tr>
+                        </table>
+
+                    </ul>
+                <h1>Welcome back to Skynet, {{ user.username }}!</h1>
+                <form id="user_form" method="post" action="/Users/">
+                {% csrf_token %}
+                <table border="1" width="25%">
+                    <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
+                    <tr><td align="right">Threshold Value: </td></tr>
+                    <tr><td align="right">
                         <input type="number" name="maxVal"  min="0" max="99999" value=""/>
                     </td>
-                </tr>
-                <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
-            </table>
-        </form>
+                    </tr>
+                    <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
+                </table>
+                </form>
+            </div>
+                    </div>
         {% else %}
 
         <!--<h1>Welcome to Skynet!</h1>
@@ -61,7 +90,7 @@
         <tr><td><a href="/Users/register/">New Customers Register Here</a></td>
         <td><a href="/Users/login/">Returning Customers Login Here</a></td>
             </tr>
-            </table> -->
+            </table>
 
         <div class = "new_user" >
                 <div class = "container">
@@ -73,7 +102,7 @@
                     <li><a href="/Users/register/">Register</a></li>
                     <li><a href="/Users/login/">Login</a></li>
                     <li><a href="#">Services</a></li>
-                    <li><a href="/Users/add_category/">New Category</a></li>
+                    <!---<li><a href="/Users/add_category/">New Category</a></li>
                     <li><a href="#">Support</a></li>
 
                     <li class="dropdown">
@@ -94,13 +123,14 @@
                     <a href="#">Learn More</a>
                 </div>
             </div>
-
-
+---->
+<!-----
         {% endif %}
 
+        <div class = "category" >
           {% if categories %}
-        <!--this will probably be an area to list services/advertise etc-->
-            <div class = "category" >
+        <!--this will probably be an area to list services/advertise etc
+
 
             <ul class = "nav">
                 {% for category in categories %}
@@ -115,16 +145,110 @@
 
                 {% endif %}
 
-                <!---<a href="/Users/about/">About</a><br /> ---->
+                <!---<a href="/Users/about/">About</a><br />
         <!--CREATE VIEW AND LINK WITH LIST OF SERVICES-->
+    <!----
         <div class = "new_cat">
             <a href="/Users/add_category/">Add a New Category</a><br />
         </div>
-            <img src ="{% static "images/logo.jpg" %}" alt = "Logo" />
+            <!--<img src ="{% static "images/logo.jpg" %}" alt = "Logo" />
 
             </div>
+        </div> ----->
+{% if user.is_authenticated %}
+    <div class="menu0">
+
+      <!-- Menu icon -->
+      <div class="icon-close0">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="#" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
         </div>
 
+         <ul>
+             <li><a href="/Users/logout/">Logout</a></li>
+             <li><a href="/Users/display_services/">View Subscriped Plans</a></li>
+             <li><a href="/Users/add_services/"> Add a Service</a></li>
+             <li><a href="/Users/delete_services/"> Remove a Service</a></li>
+             <li><a href="/Users/view_bill"> View Bill</a></li>
+             <li><a href="">Set courtesy notification threshold</a></li>
+             <li><a href="/Users/restricted/">Restricted Page</a></li>
+          </ul>
+
+   </div>
+
+    <!-- Main body -->
+    <div class="jumbotron0">
+
+      <div class="icon-menu0">
+          <i class="fa fa-bars"></i>
+        Menu
+      </div>
+
+        <div class="description0">
+            <h1>Welcome back to Skynet, {{ user.username }}!</h1>
+            <form id="user_form" method="post" action="/Users/">
+        </div>
+
+    <form id="user_form" method="post" action="/Users/">
+      {% csrf_token %}
+        <table border="1" width="25%">
+           <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
+           <tr><td align="right">Threshold Value: </td></tr>
+           <tr><td align="right">
+                    <input type="number" name="maxVal"  min="0" max="99999" value=""/>
+                </td>
+           </tr>
+           <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
+        </table>
+    </form>
+
+    </div>
+
+{% else %}
+    <div class="menu1">
+
+      <!-- Menu icon -->
+      <div class="icon-close1">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="#" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
+        </div>
+
+         <ul>
+             <li><a href="/Users/register/">Register</a></li>
+             <li><a href="/Users/login/">Login</a></li>
+             <li><a href="#">Services</a></li>
+             <li><a href="#">Contact</a></li>
+             <li><a href="#">Support</a></li>
+          </ul>
+
+   </div>
+
+    <!-- Main body -->
+    <div class="jumbotron1">
+
+      <div class="icon-menu1">
+          <i class="fa fa-bars"></i>
+        Menu
+      </div>
+
+        <div class="description1">
+            <h1>Welcome to Skynet</h1>
+            <p>Connecting People, Connecting the World</p>
+            <a href="#">Learn More</a>
+        </div>
+
+    </div>
+{% endif %}
 
     </body>
 

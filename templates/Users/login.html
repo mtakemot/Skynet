@@ -1,11 +1,23 @@
 <!DOCTYPE html>
+{% load staticfiles %}
+
 <html>
     <head>
         <!-- Is anyone getting tired of repeatedly entering the header over and over?? -->
-        <title>Skynet</title>
+        <title>Login</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'login.css' %}">
+        <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'login.js' %}"></script>
     </head>
 
     <body>
+
+    <!----
         <h1>Login to Skynet</h1>
 
         <form id="login_form" method="post" action="/Users/login/">
@@ -17,6 +29,85 @@
 
             <input type="submit" value="submit" />
         </form>
+    ----->
+
+    <div class="menu">
+
+      <!-- Menu icon -->
+      <div class="icon-close">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="#" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
+        </div>
+
+         <ul>
+             <li><a href="/Users">Back</a></li>
+             <li><a href="/Users/register/">Register</a></li>
+             <li><a href="#">Contact</a></li>
+             <li><a href="#">Support</a></li>
+          </ul>
+
+   </div>
+
+    <!-- Main body -->
+    <div class="jumbotron">
+
+      <div class="icon-menu">
+          <i class="fa fa-bars"></i>
+        Menu
+      </div>
+
+        <!---
+        <div class="login">
+            <h1>Login to Skynet</h1>
+
+        <form id="login_form" method="post" action="/Users/login/">
+            {% csrf_token %}
+            Username: <input type="text" name="username" value="" size="50" />
+            <br />
+            Password: <input type="password" name="password" value="" size="50" />
+            <br />
+
+            <input type="submit" value="submit" />
+        </form>
+
+        </div>--->
+
+        <div class="container">
+
+      <div id="login">
+
+        <form id="login_form" action="/Users/login/" method="post">
+
+
+          <fieldset class="clearfix">
+            {% csrf_token %}
+            <p><span class="fontawesome-user"></span>
+                <input type="text" name="username" value="Username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required></p>
+
+            <p><span class="fontawesome-lock"></span>
+                <input type="password"  name="password" value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required></p>
+
+            <p><input type="submit" value="Sign In"></p>
+
+          </fieldset>
+
+        </form>
+
+          <div class = "ps">
+        <p>Not a member? <a href="/Users/register/">Sign up now</a><span class="fontawesome-arrow-right"></span></p>
+        </div>
+
+      </div> <!-- end login -->
+
+    </div>
+
+
+    </div>
 
     </body>
 </html>

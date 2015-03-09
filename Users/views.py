@@ -43,9 +43,10 @@ def index(request):
         current_user = UserProfile.objects.get(user=request.user)
         print(current_user.username)
         print("testing last login date", current_user.user.last_login)
-        temp = int(value)
-        current_user.threshold = temp
-        current_user.save()
+        if(value):
+            temp = int(value)
+            current_user.threshold = temp
+            current_user.save()
         print("threshold in DB is: " ,current_user.threshold)
         # print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
         # if current_user.balance > current_user.threshold:

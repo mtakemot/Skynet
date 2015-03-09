@@ -42,9 +42,11 @@ def index(request):
         print(current_user.username)
         print("testing last login date", current_user.user.last_login)
         if(value):
-            temp = int(value)
-            current_user.threshold = temp
-            current_user.save()
+            if(int(value)>=0):
+                temp = int(value)
+                current_user.threshold = temp
+                threshold = temp
+                current_user.save()
         print("threshold in DB is: " ,current_user.threshold)
         # print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
         # if current_user.balance > current_user.threshold:
@@ -53,10 +55,16 @@ def index(request):
     if request.method == 'GET':
         print("loading index.html from GET")
 
+    try:
+        threshold = (UserProfile.objects.get(user=request.user)).threshold
+    except TypeError:
+        threshold = 0
+
+
     # return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
     #                                                      'bundle_form': bundle_form.bundle_services.all()})
 
-    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form})
+    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form, 'thresholdvalue':threshold})
 
 def about(request):
     return HttpResponse("Skynet says this is the about page for users <br/> <a href = '/Users/'>Back to Users</a>")

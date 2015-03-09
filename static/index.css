@@ -176,6 +176,7 @@ body {
   margin: 0;
   overflow: hidden;
   position: relative;
+    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
     background-image: url('http://hdwallpaper1080.com/wp-content/uploads/best-hd-wallpaper.jpg');
     -webkit-background-size: cover;
      -moz-background-size: cover;

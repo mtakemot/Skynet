@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile
 from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm
@@ -130,7 +131,7 @@ def register(request):
         profile_form = UserProfileForm(data=request.POST)
 
         # If the two forms are valid...
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid() and registered == False:
             # Save the user's form data to the database.
             user = user_form.save()
             user.first_name = request.POST['fname']
@@ -175,12 +176,16 @@ def register(request):
             # Update our variable to tell the template registration was successful.
             registered = True
 
+        #elif user_form.is_valid() and profile_form.is_valid() and registered == False:
+            #return render(request, '/Users/login.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+            return redirect('/Users/login/')
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
             print (user_form.errors, profile_form.errors)
+
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -193,6 +198,8 @@ def register(request):
     return render(request,
             'Users/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
+
+
 
 def user_login(request):
     # If the request is a HTTP POST, try to pull out the relevant information.

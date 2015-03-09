@@ -23,7 +23,7 @@
         {% if registered %}
         Skynet says: <strong>thank you for registering!</strong>
 
-        <!--CHANGE THIS TO SKYNET HOMEPAGE EVENTUALLY!!-->
+        <!--CHANGE THIS TO SKYNET HOMEPAGE EVENTUALLY!!
             <a href="/Users/login/">Login here!</a>
         {% else %}
         Skynet says: <strong>register here!</strong><br />
@@ -56,7 +56,7 @@
       </div>
 
         <div class = "logo">
-            <a href ="#" class="logo-icon">
+            <a href ="/Users/" class="logo-icon">
                 <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
             </a>
         </div>
@@ -75,9 +75,14 @@
         <div class="icon-menu">
             <i class="fa fa-bars"></i>
             Menu
-      </div>
+        </div>
+
         <div class="container">
         <div id="register">
+
+            {% if registered %}
+
+            {% else %}
 
             <form id="user_form" method="post" action="/Users/register/"
                 enctype="multipart/form-data">
@@ -95,6 +100,8 @@
 
         </div>
         </div>
+
+          {% endif %}
     </div>
 
     </body>

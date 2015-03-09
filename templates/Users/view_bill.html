@@ -1,6 +1,18 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
-<head lang="en">
+
+ <title>Users</title>
+ <head>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'view_bill.css' %}">
+        <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'view_bill.js' %}"></script>
+<!----<head lang="en">
     <meta charset="UTF-8">
     <title>Bill</title>
     <style>
@@ -18,12 +30,128 @@
         p {
             text-align: center;
         }
-    </style>
+    </style>---->
 </head>
 <body>
+
+<div class="menu">
+
+      <!-- Menu icon -->
+      <div class="icon-close">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="/Users/" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
+        </div>
+
+         <ul>
+             <li><a href="/Users/logout/">Logout</a></li>
+             <li><a href="/Users">Back</a></li>
+             <!-- <li><a href="/Users/display_services/">View Subscriped Plans</a></li> -->
+             <li><a href="/Users/add_services/"> Add a Service</a></li>
+             <li><a href="/Users/delete_services/"> Remove a Service</a></li>
+             <li><a href="/Users/view_bill"> View Bill</a></li>
+             <li><a href="">Set courtesy notification threshold</a></li>
+             <li><a href="/Users/restricted/">Restricted Page</a></li>
+          </ul>
+
+   </div>
+
+    <div class="jumbotron">
+
+      <div class="icon-menu">
+          <i class="fa fa-bars"></i>
+        Menu
+      </div>
+
+    <!----
+    <div class="table-title">
+        <h3>Subscribed Service</h3>
+    </div>
+
+    <form id="display_services" method="get" action="/Users/display_services/">
+    <table class="table-fill">
+        <thead>
+            <tr>
+                <th class="text-left">Service</th>
+                <th class="text-left">Price</th>
+            </tr>
+        </thead>
+
+        {% for package in display_services %}
+        <tbody class="table-hover">
+            <tr>
+                <td class="text-left">{{package}}</td>
+                <td class="text-left">${{package.price}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </form>
+
+    </div>
+----->
+    <div class = "table1" >
+    <form id="display_services" method="get" action="/Users/display_services/">
+
+        <table class = "table-fill">
+            <thead>
+                <tr><th>Service</th>
+                <th>Price</th>
+                <th>Termination Fee</th></tr>
+            </thead>
+
+            {% for package in display_services %}
+                <tbody class="table-hover">
+                    <tr>
+                        <td>{{package}}</td>
+                        <td>${{package.price}}</td>
+                        <td>${{package.term_fee}}</td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+
+        </table>
+    </form>
+    </div>
+
+    <div class = "table2" >
+    <form id="display_bundles" method="get" action="/Users/display_services/">
+
+        <table class = "table-fill">
+            <thead>
+                <tr>
+                    <th>Bundles</th>
+                    <th>Price</th>
+                    <th>Termination Fee</th>
+                </tr>
+            </thead>
+
+            {% for bundle in display_bundles %}
+                <tbody class="table-hover">
+                    <tr>
+                        <td>{{bundle}}</td>
+                        <td>${{bundle.price}}</td>
+                        <td>${{bundle.term_fee}}</td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+
+        </table>
+
+    <p>Total is: ${{ total }}</p>
+
+    </form>
+    </div>
+
+<!-----
     <h1>
         Current Services: <br>
     </h1>
+
     <form id="display_services" method="get" action="/Users/display_services/">
     <table class="center" border="1" style="width:25%">
      <tr><th>Service</th><th>Price</th><th>Termination Fee</th></tr>
@@ -31,6 +159,7 @@
         <tr><td>{{package}}</td> <td>${{ package.price }}</td> <td>${{package.term_fee}}</td></tr>
     {% endfor %}
     </table>
+
     </form>
     <form id="display_bundles" method="get" action="/Users/display_services/">
         <table class="center" border="1" style="width:25%">
@@ -41,6 +170,7 @@
         </table>
     </form>
     <p>Total is: ${{ total }}</p>
+----->
 
 </body>
 </html>

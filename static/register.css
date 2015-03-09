@@ -128,7 +128,6 @@ body {
   margin-bottom: 2em;
   text-transform: uppercase;
   width: 280px;
-    margin: 5px;
     padding: 10px;
 }
 
@@ -136,12 +135,8 @@ body {
   background-color: #FF0000;
 }
 
-#login > p {
+#register > p {
   text-align: center;
-}
-
-#login form input {
-  height: 50px;
 }
 
 p {

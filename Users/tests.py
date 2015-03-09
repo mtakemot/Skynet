@@ -1,3 +1,6 @@
-from django.test import TestCase
+from unittest import TestCase
+from Users.models import UserProfile
 
 # Create your tests here.
+
+

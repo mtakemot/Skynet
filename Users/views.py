@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
-from Users.models import Category, Page, UserProfile
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm
+from Users.models import Category, Page, UserProfile, UserFactory
+from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm, CustomerForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -42,9 +42,12 @@ def index(request):
         current_user = UserProfile.objects.get(user=request.user)
         print(current_user.username)
         print("testing last login date", current_user.user.last_login)
-        temp = int(value)
-        current_user.threshold = temp
-        current_user.save()
+        if(value):
+            if(int(value)>=0):
+                temp = int(value)
+                current_user.threshold = temp
+                threshold = temp
+                current_user.save()
         print("threshold in DB is: " ,current_user.threshold)
         # print("User: ", current_user.user, " threshold is now: ", current_user.threshold)
         # if current_user.balance > current_user.threshold:
@@ -53,10 +56,18 @@ def index(request):
     if request.method == 'GET':
         print("loading index.html from GET")
 
+    try:
+        threshold = (UserProfile.objects.get(user=request.user)).threshold
+        custType =(UserProfile.objects.get(user=request.user)).custType
+    except TypeError:
+        threshold = 0
+        custType=''
+
+
     # return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
     #                                                      'bundle_form': bundle_form.bundle_services.all()})
 
-    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form})
+    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form, 'thresholdvalue':threshold, 'custType': custType})
 
 def about(request):
     return HttpResponse("Skynet says this is the about page for users <br/> <a href = '/Users/'>Back to Users</a>")
@@ -134,10 +145,15 @@ def register(request):
         if user_form.is_valid() and profile_form.is_valid() and registered == False:
             # Save the user's form data to the database.
             user = user_form.save()
+
+            #call the userFactory
+
             user.first_name = request.POST['fname']
             user.last_name = request.POST['lname']
             user.email = request.POST['email']
             user.website = request.POST['website']
+            custType = request.POST['custType']
+
 
             print(user.first_name)
             print(user.last_name)
@@ -145,20 +161,23 @@ def register(request):
             # Now we hash the password with the set_password method.
             # Once hashed, we can update the user object.
             user.set_password(user.password)
-
-
             user.save()
 
+            profile = UserFactory(user)
+            profile.custType=custType
+            # profile = UserFactory(user)
+
+            print("in views, exited factory call")
             # Now sort out the UserProfile instance.
             # Since we need to set the user attribute ourselves, we set commit=False.
             # This delays saving the model until we're ready to avoid integrity problems.
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.username = user
-            profile.fname = user.first_name
-            profile.lname = user.last_name
-            profile.userEmail = user.email
-            profile.website=user.website
+            # profile = profile_form.save(commit=False)
+            # profile.user = user
+            # profile.username = user
+            # profile.fname = user.first_name
+            # profile.lname = user.last_name
+            # profile.userEmail = user.email
+            # profile.website=user.website
             #profile.picture = request.POST['picture']
 
 
@@ -624,17 +643,39 @@ def market_rep(request):
                                                          #.bundle_services.all()})
 def cust_serv(request):
     current_user = UserProfile.objects.get(user=request.user)
-    user_form = UserProfileForm()
-    service_form = DisplayForm()
-    service_form.services = Service.objects.all()
-    bundle_form = ServiceForm()
-    bundle_form.bundle_services = Bundle.objects.all()
-
-    #only allow access to customers, redirect market rep and cust serv reps
     if current_user.is_Service == False:
         return check_permission(current_user)
+    customer_form = CustomerForm()
+    customer_form.users = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
 
-    return render(request, 'Users')
+    if request.method == 'POST':
+        customer = request.POST['customer']
+        return customer_page(request, customer)
+    else:
+        return render(request, 'Users/cust_serv.html', {'customer_form': customer_form.users.all()})
+
+def customer_page(request, customer):
+    current_user = UserProfile.objects.get(username=customer)
+    print(customer)
+    if request.method == 'POST':
+        button = request.POST['submit']
+
+
+        if button == 'Delete Service':
+            service_name = request.POST['service']
+            print("service being deleted")
+            for service in current_user.services.all():
+                if (service.name == service_name):
+                    current_user.services.remove(service)
+                    current_user.balance-=service.price
+                    current_user.save()
+                    return customer_page(request, current_user.username)
+
+
+    return render(request, 'Users/customer_page.html', {'Customer': current_user.username, 'services_form': current_user.services.all()})
+    #only allow access to customers, redirect market rep and cust serv reps
+
+
 
 def check_permission(UserProfile):
 

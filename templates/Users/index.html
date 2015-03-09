@@ -191,6 +191,7 @@
 
         <div class="description0">
             <h1>Welcome back to Skynet, {{ user.username }}!</h1>
+            <h2>You are a  {{ custType }} customer! </h2>
             <form id="user_form" method="post" action="/Users/">
         </div>
 
@@ -198,7 +199,8 @@
       {% csrf_token %}
         <table border="1" width="25%">
            <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
-           <tr><td align="right">Threshold Value: </td></tr>
+           <tr><td align="right">Current Threshold Value: ${{ thresholdvalue}} </td></tr>
+
            <tr><td align="right">
                     <input type="number" name="maxVal"  min="0" max="99999" value=""/>
                 </td>

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, UserManager
 from django.template.defaultfilters import slugify
 from Packages.models import Service as serviceModels
 from Packages.models import Bundle as bundleModels
-from Rule.models import balance_notify
+from Rule.models import BusinessRules
 
 
 # Create your models here.
@@ -53,6 +53,10 @@ class UserProfile(models.Model):
 
     is_Market = models.BooleanField(default=False)
     is_Service = models.BooleanField(default=False)
+    custType = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return self.username
 
 
     def get_services(self):
@@ -62,23 +66,48 @@ class UserProfile(models.Model):
     # override so that before the actual userprofileobject.save() occurs,
     # check balance vs threshold and use rule obj method to verify if a notification
     # needs to be sent or not. Then, call userprofileobject.save()
-    # def save(self):
-    #     balance_notify(self)
-    #
-    #     super(UserProfile,self).save()
-    #     #super(UserProfile, self).save(force_insert=True, force_update=False)
+    def save(self):
+        instance = BusinessRules()
+        #instance.balance_notify(self)
+
+
+        super(UserProfile,self).save()
+        #super(UserProfile, self).save(force_insert=True, force_update=False)
 
 
 
+def UserFactory(newUser):
+    profile=UserProfile(user=newUser, username=newUser, fname=newUser.first_name,
+                                   lname=newUser.first_name, userEmail=newUser.email, website=newUser.website)
+    #profile.save(commit=False)
+    return profile
 
-    #def check_permission(self):
-        #if self.is_Market:
-            #return HttpResponseRedirect('/Users/market_rep')
-
-
-
-
-    # Override the __unicode__() method to return out something meaningful!
-    def __str__(self):
-        return 'Name: %s %s UserName: %s' % (self.fname, self.lname, self.username)
+# class UserFactory(User):
+#     current_profile = models.OneToOneField(UserProfile)
+#
+#
+#
+#
+#     def __init__(self, user):
+#         self.current_profile = UserProfile(user=self.user, username=self.user.name,fname=self.first_name,
+#                                    lname=self.first_name, userEmail=self.email, website=self.website)
+#
+#         print("testing factory, USER first name: ", self.current_profile.fname)
+#         #current_user.save()
+#
+#     def save(self):
+#         print("saving this factory's generated UserProfile")
+#         self.current_profile.save()
+#         return self.current_profile
+#
+#     #def check_permission(self):
+#         #if self.is_Market:
+#             #return HttpResponseRedirect('/Users/market_rep')
+#
+#
+#
+#
+#     # Override the __unicode__() method to return out something meaningful!
+#     def __str__(self):
+#         return 'Name: %s %s UserName: %s' % (self.fname, self.lname, self.username)
 

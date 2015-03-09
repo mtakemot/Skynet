@@ -5,14 +5,14 @@
     <head>
         <title>Register</title>
         {% load static %}
-        <link rel="stylesheet" href="{% static 'register.css' %}">
+       <!---<link rel="stylesheet" href="{% static 'register.css' %}">
         <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="{% static 'register.js' %}"></script>
-
+        --->
     </head>
 
     <body>
@@ -94,7 +94,10 @@
                 <p>{{ user_form.as_p }}</p>
                 <p>{{ profile_form.as_p }}</p>
 
+
                 </fieldset>
+                <input type="radio" name="custType" value="Retail" /> Retail
+                <input type="radio" name="custType" value="Commercial"/> Commercial
 
                 <input type="submit" name="submit" value="Register" />
 

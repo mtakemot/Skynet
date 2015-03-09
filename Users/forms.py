@@ -47,6 +47,9 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password', 'fname', 'lname')
 
+class threshForm(forms.ModelForm):
+    maxVal = forms.IntegerField()
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
@@ -113,5 +116,11 @@ class DeleteServiceForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = ('name', 'description', 'price', 'term_fee')
+
+class CustomerForm(forms.ModelForm):
+    users = forms.CharField(max_length=5000, label="Current Users")
+    class Meta:
+        model = UserProfile
+        fields = ('username', 'services', 'bundles')
 
 #class CreateService(forms.ModelForm):

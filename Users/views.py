@@ -631,15 +631,31 @@ def cust_serv(request):
 
     if request.method == 'POST':
         customer = request.POST['customer']
+        current_user = UserProfile.objects.get(username=customer)
+
         return customer_page(request, customer)
     else:
         return render(request, 'Users/cust_serv.html', {'customer_form': customer_form.users.all()})
 
 def customer_page(request, customer):
-    userprofile = UserProfile.objects.get(username=customer)
-    return render(request, 'Users/customer_page.html', {'Customer' : userprofile.username})
+    current_user = UserProfile.objects.get(username=customer)
+    print(customer)
+    if request.method == 'POST':
+        button = request.POST['submit']
 
 
+        if button == 'Delete Service':
+            service_name = request.POST['service']
+            print("service being deleted")
+            for service in current_user.services.all():
+                if (service.name == service_name):
+                    current_user.services.remove(service)
+                    current_user.balance-=service.price
+                    current_user.save()
+                    return customer_page(request, current_user.username)
+
+
+    return render(request, 'Users/customer_page.html', {'Customer': current_user.username, 'services_form': current_user.services.all()})
     #only allow access to customers, redirect market rep and cust serv reps
 
 

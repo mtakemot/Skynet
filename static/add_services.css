@@ -124,6 +124,7 @@ div.table-title {
   animation: float 5s infinite;
 }
 
+
 th {
   color:#D5DDE5;;
   background:#1b1e24;
@@ -242,6 +243,8 @@ td.text-right {
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 14px;
   line-height: 1.5em;
+    margin-top: 10px;
+    margin-left: 340px;
 }
 
 #service form input[type="submit"]:hover {

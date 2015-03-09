@@ -129,13 +129,20 @@ body {
   text-transform: uppercase;
   width: 280px;
     margin-top: 10px;
-    margin-left: 5px;
-    padding: 10px;
+
+  border: none;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
 }
 
 #register form input[type="submit"]:hover {
   background-color: #FF0000;
 }
+
+/*.button{
+    text-align: center;
+}*/
 
 #register > p {
   text-align: center;
@@ -145,12 +152,11 @@ p {
   line-height: 1.5em;
 }
 
-input {
+/*input {
   border: none;
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 14px;
   line-height: 1.5em;
   padding: 0;
-
-  /*-webkit-appearance: none;*/
-}
+  /*-webkit-appearance: none;
+}*/

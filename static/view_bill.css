@@ -124,6 +124,11 @@ div.table-title {
   animation: float 5s infinite;
 }
 
+.table3{
+    margin-top: 10px;
+    margin-left: 338px;
+}
+
 th {
   color:#D5DDE5;;
   background:#1b1e24;

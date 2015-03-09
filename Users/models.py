@@ -54,6 +54,9 @@ class UserProfile(models.Model):
     is_Market = models.BooleanField(default=False)
     is_Service = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.username
+
 
     def get_services(self):
         return "\n".join([p.name for p in self.services.all()])

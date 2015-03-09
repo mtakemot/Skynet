@@ -57,14 +57,16 @@ def index(request):
 
     try:
         threshold = (UserProfile.objects.get(user=request.user)).threshold
+        custType =(UserProfile.objects.get(user=request.user)).custType
     except TypeError:
         threshold = 0
+        custType=''
 
 
     # return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
     #                                                      'bundle_form': bundle_form.bundle_services.all()})
 
-    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form, 'thresholdvalue':threshold})
+    return render(request, 'Users/index.html', {'categories': category_list, 'user_form': user_form, 'thresholdvalue':threshold, 'custType': custType})
 
 def about(request):
     return HttpResponse("Skynet says this is the about page for users <br/> <a href = '/Users/'>Back to Users</a>")
@@ -149,6 +151,8 @@ def register(request):
             user.last_name = request.POST['lname']
             user.email = request.POST['email']
             user.website = request.POST['website']
+            custType = request.POST['custType']
+
 
             print(user.first_name)
             print(user.last_name)
@@ -159,7 +163,7 @@ def register(request):
             user.save()
 
             profile = UserFactory(user)
-
+            profile.custType=custType
             # profile = UserFactory(user)
 
             print("in views, exited factory call")
@@ -635,12 +639,10 @@ def cust_serv(request):
     if current_user.is_Service == False:
         return check_permission(current_user)
     customer_form = CustomerForm()
-    customer_form.users = UserProfile.objects.all()
+    customer_form.users = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
 
     if request.method == 'POST':
         customer = request.POST['customer']
-        current_user = UserProfile.objects.get(username=customer)
-
         return customer_page(request, customer)
     else:
         return render(request, 'Users/cust_serv.html', {'customer_form': customer_form.users.all()})

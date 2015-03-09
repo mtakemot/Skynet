@@ -53,6 +53,7 @@ class UserProfile(models.Model):
 
     is_Market = models.BooleanField(default=False)
     is_Service = models.BooleanField(default=False)
+    custType = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
         return self.username

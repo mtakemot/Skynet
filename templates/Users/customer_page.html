@@ -3,17 +3,19 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Customer Page for {{ Customer }}</title>
+
+    <form id="services_form" method="post" action="/Users/customer_page/">
     <table border="1" width="25%">
     <th>Services</th>
-    <form id="services_form" method="post" action="/Users/customer_page/">
         {% csrf_token %}
         {% for service in services_form %}
             <tr><td><input type="radio" name="service" value="{{ service }}">{{ service }}</td></tr>
-        {% endfor %}
-    </table>
-        <input type="submit" name="submit" value="Delete Service"><br>
-    </form>
+        {% endfor %}<br/>
 
+    </table>
+            <input type="submit" name="submit" value="Delete Service"><br>
+
+    </form>
 
 
 </head>

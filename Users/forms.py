@@ -114,4 +114,10 @@ class DeleteServiceForm(forms.ModelForm):
         model = Service
         fields = ('name', 'description', 'price', 'term_fee')
 
+class CustomerForm(forms.ModelForm):
+    users = forms.CharField(max_length=5000, label="Current Users")
+    class Meta:
+        model = UserProfile
+        fields = ('username', 'services', 'bundles')
+
 #class CreateService(forms.ModelForm):

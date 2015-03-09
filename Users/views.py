@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile, UserFactory
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm
+from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm, CustomerForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -620,20 +620,34 @@ def market_rep(request):
 
         return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
                                                          'bundle_form': bundle_form.bundle_services.all()})
-                                                         #.bundle_services.all()})
+@login_required                                                         #.bundle_services.all()})
 def cust_serv(request):
     current_user = UserProfile.objects.get(user=request.user)
-    user_form = UserProfileForm()
-    service_form = DisplayForm()
-    service_form.services = Service.objects.all()
-    bundle_form = ServiceForm()
-    bundle_form.bundle_services = Bundle.objects.all()
-
     #only allow access to customers, redirect market rep and cust serv reps
     if current_user.is_Service == False:
         return check_permission(current_user)
+    customer_form = CustomerForm()
+    customer_form.users = UserProfile.objects.all()
 
-    return render(request, 'Users')
+    if request.method == 'POST':
+        customer = request.POST['customer']
+        return customer_page(request, customer)
+
+
+
+    #customer_form.services = Service.objects.all()
+    #bundle_form = ServiceForm()
+    #bundle_form.bundle_services = Bundle.objects.all()
+
+    else:
+
+        return render(request, 'Users/cust_serv.html', {'customer_form': customer_form.users.all()})
+
+def customer_page(request, customer):
+    userprofile = UserProfile.objects.get(username=customer)
+    return render(request, 'Users/customer_page.html', {'Customer': userprofile.username})
+
+
 
 def check_permission(UserProfile):
 

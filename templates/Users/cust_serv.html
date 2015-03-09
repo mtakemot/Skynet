@@ -2,9 +2,21 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Welcome, Customer Representative!</title>
 </head>
 <body>
+    <a href="/Users/register/">Register a new customer</a>
+    <table border="1" width="25%">
+    <th>Customers</th>
+    <form id="customer_form" method="post" action="/Users/cust_serv/">
+         {% csrf_token %}
+         {%  for customer in customer_form %}
+             <tr><td><input type="radio" name="customer" value= "{{customer}}"> {{ customer }}</td></tr>
+         {% endfor %}
+
+    </table>
+    <input type="submit" name="submit" value="Modify Customer">
+    </form>
 
 </body>
 </html>

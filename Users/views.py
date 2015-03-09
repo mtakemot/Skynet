@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile, UserFactory
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm
+from Users.forms import threshForm, CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -33,8 +33,10 @@ def index(request):
     #adding requirement 10, autoemail. We need to allow user to set a threshold.
     if request.method == 'POST':
 
-        user_form = UserProfileForm(data=request.POST)
+        user_form = UserProfileForm(request.POST)
         #print("user_form first: ", user_form)
+        if user_form.is_valid():
+            print("testing int vs str from POST: ", user_form)
 
         value = request.POST['maxVal']
         #not sure what it means BUT,
@@ -637,14 +639,18 @@ def cust_serv(request):
 
 def check_permission(UserProfile):
 
-    if UserProfile.is_Market:
+    if UserProfile.user.is_superuser:
+        return HttpResponseRedirect('/admin/')
+
+    elif UserProfile.is_Market:
         return HttpResponseRedirect('/Users/market_rep')
 
     elif UserProfile.is_Service:
+        #change redirect to cust serv page once we set up html for it
         return HttpResponseRedirect('/Users/login')
 
     else:
-        return False
+        return HttpResponseRedirect('/Users/')
 
 #def validate_views(obj, ):
     #if render_loc!='':

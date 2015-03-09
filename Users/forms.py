@@ -47,6 +47,9 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password', 'fname', 'lname')
 
+class threshForm(forms.ModelForm):
+    maxVal = forms.IntegerField()
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile

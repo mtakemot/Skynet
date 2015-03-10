@@ -855,7 +855,7 @@ def check_permission(UserProfile):
         return HttpResponseRedirect('/Users/market_rep')
 
     elif UserProfile.is_Service:
-        return HttpResponseRedirect('/Users/cust_rep')
+        return HttpResponseRedirect('/Users/cust_serv')
 
     else:
         return False

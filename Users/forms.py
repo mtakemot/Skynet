@@ -72,6 +72,17 @@ class BundleServForm(forms.Form):
     class Meta:
         model = Bundle
         #fields = ('name', 'description', 'price', 'term_fee')
+class RepForm(forms.Form):
+    bundles = forms.MultipleChoiceField(
+                                        widget=CheckboxSelectMultiple
+                                        )
+    #name = forms.CharField(max_length=123, )
+    #description = forms.CharField(max_length=250)
+    #price = forms.IntegerField()
+    #term_fee = forms.IntegerField()
+    class Meta:
+        model = Bundle
+        #fields = ('name', 'description', 'price', 'term_fee')
 
 class ServiceForm(forms.ModelForm):
     name = forms.CharField(max_length=128,)

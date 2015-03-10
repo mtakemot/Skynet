@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile, UserFactory
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm as bForm, BundleServForm, CustomerForm
+from Users.forms import CategoryForm, UserForm, UserProfileForm, RepForm, ServiceForm, DisplayForm, BillForm, BundleForm as bForm, BundleServForm, CustomerForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -730,12 +730,88 @@ def cust_serv(request):
         return check_permission(current_user)
     customer_form = CustomerForm()
     customer_form.users = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
+    service_form = DisplayForm()
+    service_form.services = Service.objects.all()
+    bundle_form = ServiceForm()
+    bundle_form.bundle_services = Bundle.objects.all()
 
     if request.method == 'POST':
-        customer = request.POST['customer']
-        return customer_page(request, customer)
+
+        button = request.POST['submit']
+        customer = request.POST['customer', False]
+
+        userToChange = UserProfile.objects.get(username=customer)
+
+        if button == 'Delete Service':
+            bundle_form2=BundleServForm()
+            bundle_form2.bundle_services = request.POST.getlist('service')
+            #for services in userToChange.services.all():
+            #    for y in bundle_form2.bundle_services:
+            #         if services.name == y:
+            #             print("Can't add duplicate services")
+            #             return HttpResponseRedirect("/Users/cust_serv/")
+
+            for x in Service.objects.all():
+                for y in bundle_form2.bundle_services:
+                    if x.name == y:
+                        userToChange.services.remove(x)
+
+        elif button == 'Add Service':
+            bundle_form2=BundleServForm()
+            bundle_form2.bundle_services = request.POST.getlist('service')
+            for services in userToChange.services.all():
+                for y in bundle_form2.bundle_services:
+                    if services.name == y:
+                        print("Can't add duplicate services")
+                        return HttpResponseRedirect("/Users/cust_serv/")
+
+            for x in Service.objects.all():
+                for y in bundle_form2.bundle_services:
+                    if x.name == y:
+                        userToChange.services.add(x)
+
+        elif button == 'Delete Bundle':
+            bundle_form2=RepForm()
+            bundle_form2.bundles = request.POST.getlist('bundle')
+
+            #for services in userToChange.services.all():
+            #    for y in bundle_form2.bundle_services:
+            #         if services.name == y:
+            #             print("Can't add duplicate services")
+            #             return HttpResponseRedirect("/Users/cust_serv/")
+
+            for x in Bundle.objects.all():
+                for y in bundle_form2.bundles:
+                    if x.name == y:
+                        userToChange.bundles.remove(x)
+
+        elif button == 'Add Bundle':
+            bundle_form2=RepForm()
+            bundle_form2.bundles= request.POST.getlist('bundle')
+
+
+            for bundle in userToChange.bundles.all():
+                for y in bundle_form2.bundles:
+                    if bundle.name == y:
+                        print("Can't add duplicate bundles")
+                        return HttpResponseRedirect("/Users/cust_serv/")
+
+            for x in Bundle.objects.all():
+                for y in bundle_form2.bundles:
+                    if x.name == y:
+                        userToChange.bundles.add(x)
+
+        return render(request, 'Users/cust_serv.html', {'bundle_form': bundle_form.bundle_services.all(), 'customer_form': customer_form.users.all(), 'service_form': service_form.services.all()})
+
+
+
+
+
+
+
+
     else:
-        return render(request, 'Users/cust_serv.html', {'customer_form': customer_form.users.all()})
+        return render(request, 'Users/cust_serv.html', {'bundle_form': bundle_form.bundle_services.all(), 'customer_form': customer_form.users.all(), 'service_form': service_form.services.all()})
 
 def customer_page(request, customer):
     current_user = UserProfile.objects.get(username=customer)

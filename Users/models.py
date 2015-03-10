@@ -59,9 +59,12 @@ class UserProfile(models.Model):
         return self.username
 
 
+
     def get_services(self):
         return "\n".join([p.name for p in self.services.all()])
 
+    def get_bundles(self):
+        return "\n".join([p.name for p in self.bundles.all()])
     # override save, b/c any change in a field will always save in DB using Django framework.
     # override so that before the actual userprofileobject.save() occurs,
     # check balance vs threshold and use rule obj method to verify if a notification

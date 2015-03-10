@@ -155,6 +155,8 @@ def register(request):
             custType = request.POST['custType']
 
 
+
+
             print(user.first_name)
             print(user.last_name)
 
@@ -216,7 +218,7 @@ def register(request):
 
     return render(request,
             'Users/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
+            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
 
@@ -252,8 +254,8 @@ def user_login(request):
 
                 if current_user.is_Market:
                     return HttpResponseRedirect('/Users/market_rep')
-                #if current_user.is_Service:
-                    #return HttpResponseRedirect('/Users/cust_serv')
+                if current_user.is_Service:
+                    return HttpResponseRedirect('/Users/cust_serv')
 
                 else:
                     return HttpResponseRedirect('/Users/')
@@ -545,7 +547,11 @@ def market_rep(request):
 
     #only allow access to customers, redirect market rep and cust serv reps
     if current_user.is_Market == False:
-        return check_permission(current_user)
+        redirect = check_permission(current_user)
+        if(not redirect):
+            return HttpResponseRedirect("/Users/")
+
+        return redirect
 
     print(current_user.is_Market)
     service_form = DisplayForm()
@@ -727,7 +733,11 @@ def market_rep(request):
 def cust_serv(request):
     current_user = UserProfile.objects.get(user=request.user)
     if current_user.is_Service == False:
-        return check_permission(current_user)
+        redirect = check_permission(current_user)
+        if(not redirect):
+            return HttpResponseRedirect("/Users/")
+        return redirect
+
     customer_form = CustomerForm()
     customer_form.users = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
     service_form = DisplayForm()
@@ -737,8 +747,11 @@ def cust_serv(request):
 
     if request.method == 'POST':
 
-        button = request.POST['submit']
-        customer = request.POST['customer']
+        try:
+            button = request.POST['submit']
+            customer = request.POST['customer']
+        except MultiValueDictKeyError:
+            return HttpResponseRedirect("/Users/cust_serv")
 
         userToChange = UserProfile.objects.get(username=customer)
 
@@ -842,7 +855,7 @@ def check_permission(UserProfile):
         return HttpResponseRedirect('/Users/market_rep')
 
     elif UserProfile.is_Service:
-        return HttpResponseRedirect('/Users/login')
+        return HttpResponseRedirect('/Users/cust_rep')
 
     else:
         return False

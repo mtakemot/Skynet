@@ -16,6 +16,20 @@
          {% endfor %}
 
 
+    <form id="bundle_form" method="post" action="/Users/cust_serv/">
+    <table border="1" width="25%">
+    <th>Bundle</th> <th>Price</th>
+        {% for bundle in bundle_form%}
+            {% csrf_token %}
+           <tr><td><input type = "checkbox" name = "bundle" value="{{ bundle.name }}">
+            {{bundle.name}}</td><td>{{ bundle.price }}</td></tr>
+
+        {% endfor %}<br/><br/>
+    </table>
+        <input type="submit" name="submit" value="Delete Bundle">
+        <input type="submit" name="submit" value="Add Bundle">
+
+
     </table>
     <form id="service_form" method="post" action="/Users/cust_serv/">
     <table border="1" width="25%">
@@ -31,20 +45,6 @@
         <input type="submit" name="submit" value="Add Service">
 
     </form>
-
-    <form id="bundle_form" method="post" action="/Users/cust_serv/">
-    <table border="1" width="25%">
-    <th>Bundle</th> <th>Price</th>
-        {% for bundle in bundle_form%}
-            {% csrf_token %}
-           <tr><td><input type = "checkbox" name = "bundle" value="{{ bundle.name }}">
-            {{bundle.name}}</td><td>{{ bundle.price }}</td></tr>
-
-        {% endfor %}<br/><br/>
-    </table>
-        <input type="submit" name="submit" value="Delete Bundle">
-        <input type="submit" name="submit" value="Add Bundle">
-
     </form>
     </form>
 </body>

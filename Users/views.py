@@ -738,7 +738,7 @@ def cust_serv(request):
     if request.method == 'POST':
 
         button = request.POST['submit']
-        customer = request.POST['customer', False]
+        customer = request.POST['customer']
 
         userToChange = UserProfile.objects.get(username=customer)
 
@@ -772,7 +772,7 @@ def cust_serv(request):
 
         elif button == 'Delete Bundle':
             bundle_form2=RepForm()
-            bundle_form2.bundles = request.POST.getlist('bundle')
+            bundle_form2.bundles=request.POST.getlist('bundle')
 
             #for services in userToChange.services.all():
             #    for y in bundle_form2.bundle_services:
@@ -787,7 +787,7 @@ def cust_serv(request):
 
         elif button == 'Add Bundle':
             bundle_form2=RepForm()
-            bundle_form2.bundles= request.POST.getlist('bundle')
+            bundle_form2.bundles=request.POST.getlist('bundle')
 
 
             for bundle in userToChange.bundles.all():

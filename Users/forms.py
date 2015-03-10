@@ -82,13 +82,19 @@ class ServiceForm(forms.ModelForm):
         model = Service
         fields = ('name', 'description', 'price', 'term_fee')
 
-class BundleForm(forms.ModelForm):
-    name = forms.CharField(max_length=123, )
-    description = forms.CharField(max_length=250)
-    price = forms.IntegerField()
-    term_fee = forms.IntegerField()
+#class BundleForm(forms.ModelForm):
+    #name = forms.CharField(max_length=123, )
+    #description = forms.CharField(max_length=250)
+    #price = forms.IntegerField()
+    #term_fee = forms.IntegerField()
     #bundle_services = forms.ChoiceField(widget=forms.CheckboxSelectMultiple )
-    bundle_services = forms.CharField(max_length=120, label="Bundled Services")
+    #bundle_services = forms.CharField(max_length=120, label="Bundled Services")
+    #class Meta:
+    #    model = Bundle
+    #    fields = ('name', 'description', 'price', 'term_fee')
+
+class BundleForm(forms.ModelForm):
+    bundles = forms.CharField(max_length=120, label="Current Bundles")
     class Meta:
         model = Bundle
         fields = ('name', 'description', 'price', 'term_fee')
@@ -99,11 +105,11 @@ class BillForm(forms.ModelForm):
         model = Service
         fields = ('name', 'description', 'price', 'term_fee')
 
-class BundleForm(forms.ModelForm):
-    bundles = forms.CharField(max_length=120, label="Current Bundles")
-    class Meta:
-        model = Bundle
-        fields = ('name', 'description', 'price', 'term_fee')
+#class BundleForm(forms.ModelForm):
+    #bundles = forms.CharField(max_length=120, label="Current Bundles")
+    #class Meta:
+        #model = Bundle
+        #fields = ('name', 'description', 'price', 'term_fee')
 
 class DisplayForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")

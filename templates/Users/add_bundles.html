@@ -49,39 +49,10 @@
       </div>
     <div class="table-title">
         <h1>
-            Select a Service to Purchase<br>
+            Select a Bundle to Purchase<br>
         </h1>
     </div>
-
-    <div id = 'service'>
-    <form id="service_form" method="post" action="/Users/add_services/">
-     <table class="table-fill">
-        <!--
-        <input type="radio" name="package" value="package 1">Package 1<br>
-        <input type="radio" name="package" value="package 2">Package 2<br>
-        <input type="radio" name="package" value="package 3"a>Package 3<br>
-        <input type="radio" name="package" value="package 4">Package 4<br>
-        <input type="radio" name="package" value="package 5">Package 5<br>
-        <input type="submit" name="submit" value="Purchase" />
-        -->
-        {% csrf_token %}
-        <!---<table border="1" width="25%">--->
-        <thead>
-             <tr><th>Service</th><th>Price</th></tr>
-        </thead>
-
-        {% for service in service_form%}
-            <tbody class="table-hover">
-                <tr>
-                    <td><input type = "checkbox" name = "service" value="{{ service.name }}">
-                                {{service.name}}</td>
-                    <td>${{ service.price }}</td>
-                </tr>
-            </tbody>
-        {% endfor %}
-
-     </table>
-     <form id="bundle_form" method="post" action="/Users/add_services/">
+     <form id="bundle_form" method="post" action="/Users/add_bundles/">
      <table class="table-fill">
         <!--
         <input type="radio" name="package" value="package 1">Package 1<br>

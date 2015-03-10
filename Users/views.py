@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile, UserFactory
-from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm,BundleServForm, CustomerForm
+from Users.forms import CategoryForm, UserForm, UserProfileForm, ServiceForm, DisplayForm, BillForm, BundleForm as bForm, BundleServForm, CustomerForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -286,6 +286,7 @@ def restricted(request):
 def user_logout(request):
     #current_user = UserProfile.objects.get(user=request.user)
 
+
     #only allow access to customers, redirect market rep and cust serv reps
     #redirect = check_permission(current_user)
     #if redirect!=False:
@@ -298,6 +299,45 @@ def user_logout(request):
     return HttpResponseRedirect('/Users/')
 
 @login_required
+def add_bundle(request):
+    current_user = UserProfile.objects.get(user=request.user)
+    redirect = check_permission(current_user)
+    if redirect!=False:
+        return redirect
+
+
+    if request.method == 'POST':
+        try:
+            bundle_name = request.POST['bundle']
+            print(bundle_name)
+        except MultiValueDictKeyError:
+            return HttpResponseRedirect("/Users/add_bundles/")
+
+
+        for bundle in current_user.bundles.all():
+            if bundle.name == bundle_name:
+                print("Can't add duplicate bundles")
+                return HttpResponseRedirect("/Users/add_bundles/")
+
+        for bundle in Bundle.objects.all():
+            if bundle.name == bundle_name:
+                current_user.balance+=bundle.price
+                current_user.bundles.add(bundle)
+                current_user.save()
+                print ("added bundle successfully")
+
+        return HttpResponseRedirect('/Users/view_bill')
+
+    else:
+
+        bundle_form = bForm();
+        bundle_form.bundles = Bundle.objects.all()
+
+
+        return render(request, 'Users/add_bundles.html', {'bundle_form': bundle_form.bundles.all()})
+
+
+@login_required
 def add_services(request):
     #if the request on this page coming after loading and from a user input:
     current_user = UserProfile.objects.get(user=request.user)
@@ -305,7 +345,6 @@ def add_services(request):
 
     #only allow access to customers, redirect market rep and cust serv reps
     redirect = check_permission(current_user)
-    print(redirect)
     if redirect!=False:
         return redirect
 
@@ -317,9 +356,10 @@ def add_services(request):
         #Service database and find the object with matching name.
         try:
             service_name = request.POST['service']
+            print(service_name)
         except MultiValueDictKeyError:
             return HttpResponseRedirect("/Users/add_services/")
-
+        print("0")
         # for services in Service.objects.all():
         #     if services.name == service_name:
         #         current_user.balance+=services.price
@@ -357,7 +397,7 @@ def add_services(request):
         print("HAHAH")
 
         #updates current user's list of services, and
-        return HttpResponseRedirect('/Users/display_services')
+        return HttpResponseRedirect('/Users/view_bill')
 
 
         #this grabs which package the user chose
@@ -365,8 +405,13 @@ def add_services(request):
         #just render the page the first time
         print("hello")
         service_form = DisplayForm()
+
         #passing to the HTML ALL the contents in the Service database
         service_form.services = Service.objects.all()
+        #bundle_form = bForm();
+        #bundle_form.bundles = Bundle.objects.all()
+
+
         return render(request, 'Users/add_services.html', {'service_form': service_form.services.all()})
 
 @login_required
@@ -405,14 +450,53 @@ def view_bill(request):
 
     bill_form = BillForm()
     bill_form.services = current_user.services.all()
-    bundle_form = BundleForm()
+    bundle_form = bForm()
     bundle_form.bundles = current_user.bundles.all()
     cost = 0
     for service in current_user.services.all():
+        print(service)
         cost += service.price
     for bundle in current_user.bundles.all():
         cost += bundle.price
-    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles, 'display_services': bill_form.services, 'total':current_user.balance})
+    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles.all(), 'display_services': bill_form.services, 'total':current_user.balance})
+
+@login_required
+def delete_bundles(request):
+    current_user = UserProfile.objects.get(user=request.user)
+
+    #only allow access to customers, redirect market rep and cust serv reps
+    redirect = check_permission(current_user)
+    if redirect!=False:
+        return redirect
+
+    if request.method == 'POST':
+        try:
+            bundle = request.POST['bundle']
+        except MultiValueDictKeyError:
+            return HttpResponseRedirect("/Users/delete_bundle/")
+
+
+        newBundle = Bundle(name=bundle, description='', price=0, term_fee=0)
+        print ("test deleting package name: ")
+
+        for bundle in current_user.bundles.all():
+            if (bundle.name == newBundle.name):
+                current_user.bundles.remove(bundle)
+                current_user.balance-=bundle.price
+                current_user.save()
+
+
+
+        #updates current users new attribute
+        return HttpResponseRedirect('/Users/view_bill')
+
+
+        #this grabs which package the user chose
+    else:
+
+        bundle_form = bForm()
+        bundle_form.bundles = current_user.bundles.all()
+        return render(request, 'Users/delete_bundles.html', {'bundle_form': bundle_form.bundles.all()})
 
 @login_required
 def delete_services(request):
@@ -432,7 +516,6 @@ def delete_services(request):
 
         newPackage = Service(name=package, description='', price=0, term_fee=0)
         print ("test deleting package name: ")
-        print (newPackage.name)
         #adds package to users list of services
          # current_user.services.add(newPackage)
 

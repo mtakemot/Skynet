@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-{% load staticfiles %}
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Packages</title>
+    <title>Current Services</title>
     {% load static %}
-        <link rel="stylesheet" href="{% static 'add_services.css' %}">
+        <link rel="stylesheet" href="{% static 'delete_services.css' %}">
         <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="{% static 'add_services.js' %}"></script>
+        <script src="{% static 'delete_services.js' %}"></script>
 </head>
 <body>
 
@@ -32,10 +31,10 @@
              <li><a href="/Users/logout/">Logout</a></li>
              <li><a href="/Users">Back</a></li>
              <li><a href="/Users/display_services/">View Subscriped Plans</a></li>
-             <!--<li><a href="/Users/add_services/"> Add a Service</a></li>-->
-             <li><a href="/Users/delete_services/"> Remove a Service</a></li>
+             <li><a href="/Users/add_services/"> Add a Service</a></li>
+             <!---<li><a href="/Users/delete_services/"> Remove a Service</a></li>-->
              <li><a href="/Users/view_bill"> View Bill</a></li>
-             <!---<li><a href="">Set courtesy notification threshold</a></li>--->
+             <!----<li><a href="">Set courtesy notification threshold</a></li>--->
              <li><a href="/Users/restricted/">Restricted Page</a></li>
           </ul>
 
@@ -47,15 +46,15 @@
           <i class="fa fa-bars"></i>
         Menu
       </div>
-    <div class="table-title">
+
+    <div class = "table-title">
         <h1>
-            Select a Service to Purchase<br>
+            Select a bundle to delete:<br>
         </h1>
     </div>
 
-    <div id = 'service'>
-    <form id="service_form" method="post" action="/Users/add_services/">
-     <table class="table-fill">
+    <div id = "service">
+        <form id="bundle_form" method="post" action="/Users/delete_bundles/">
         <!--
         <input type="radio" name="package" value="package 1">Package 1<br>
         <input type="radio" name="package" value="package 2">Package 2<br>
@@ -65,30 +64,36 @@
         <input type="submit" name="submit" value="Purchase" />
         -->
         {% csrf_token %}
-        <!---<table border="1" width="25%">--->
-        <thead>
-             <tr><th>Service</th><th>Price</th></tr>
-        </thead>
+        <!------
+            <table border="1" width="25%">
+                 <tr><th>Service</th><th>Price</th></tr>
 
-        {% for service in service_form%}
-            <tbody class="table-hover">
-                <tr>
-                    <td><input type = "checkbox" name = "service" value="{{ service.name }}">
-                                {{service.name}}</td>
-                    <td>${{ service.price }}</td>
-                </tr>
-            </tbody>
-        {% endfor %}
+            {% for bundle in bundle_form%}
+                <tr><td><input type = "radio" name = "service" value="{{ service.name }}">
+                {{service.name}}</td> <td>${{ service.price }}</td></tr>
 
-     </table>
+            {% endfor %}<br/>
+            </table>
+        ------>
 
-     <div class = "button">
-            <input type="submit" name="submit" value="Purchase" />
-     </div>
+            <table class = "table-fill" >
+                <thead>
+                     <tr><th>Bundle</th><th>Price</th></tr>
+                </thead>
+
+                {% for bundle in bundle_form%}
+                    <tbody class="table-hover">
+                        <tr>
+                            <td><input type = "radio" name = "bundle" value="{{ bundle.name }}">
+                                {{bundle.name}}</td>
+                            <td>${{ bundle.price }}</td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+
+            </table>
+            <input type="submit" name="submit" value="Submit" />
     </form>
-
-    </div>
-
     </div>
 </body>
 </html>

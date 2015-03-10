@@ -49,6 +49,7 @@ class UserProfile(models.Model):
 
     #Follow is for customer's current balance, and balance threshold (for notifications)
     balance = models.IntegerField(max_length=9, default=0)
+    term_fees = models.IntegerField(max_length=9, default=0)
     threshold = models.IntegerField(max_length=9, default=0)
 
     is_Market = models.BooleanField(default=False)

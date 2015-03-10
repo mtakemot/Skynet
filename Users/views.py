@@ -310,23 +310,37 @@ def add_bundle(request):
 
     if request.method == 'POST':
         try:
-            bundle_name = request.POST['bundle']
+            bundle_name = request.POST.getlist('bundle')
             print(bundle_name)
         except MultiValueDictKeyError:
             return HttpResponseRedirect("/Users/add_bundles/")
+        bundle_form2=RepForm()
+        bundle_form2.bundle_services = bundle_name
+        for services in current_user.bundles.all():
+            for y in bundle_form2.bundle_services:
+                if services.name == y:
+                    print("Can't add duplicate services")
+                    return HttpResponseRedirect("/Users/cust_serv/")
+
+        for x in Bundle.objects.all():
+            for y in bundle_form2.bundle_services:
+                if x.name == y:
+                    current_user.bundles.add(x)
+                    current_user.balance += x.price
+                    current_user.save()
 
 
-        for bundle in current_user.bundles.all():
-            if bundle.name == bundle_name:
-                print("Can't add duplicate bundles")
-                return HttpResponseRedirect("/Users/add_bundles/")
+     #   for bundle in current_user.bundles.all():
+      #      if bundle.name == bundle_name:
+      #          print("Can't add duplicate bundles")
+      #          return HttpResponseRedirect("/Users/add_bundles/")
 
-        for bundle in Bundle.objects.all():
-            if bundle.name == bundle_name:
-                current_user.balance+=bundle.price
-                current_user.bundles.add(bundle)
-                current_user.save()
-                print ("added bundle successfully")
+      #  for bundle in Bundle.objects.all():
+      #      if bundle.name == bundle_name:
+      #          current_user.balance+=bundle.price
+      #          current_user.bundles.add(bundle)
+      #          current_user.save()
+      #          print ("added bundle successfully")
 
         return HttpResponseRedirect('/Users/view_bill')
 
@@ -357,10 +371,25 @@ def add_services(request):
         #this will just copy the name locally so that we can iterate through the
         #Service database and find the object with matching name.
         try:
-            service_name = request.POST['service']
+            service_name = request.POST.getlist('service')
             print(service_name)
         except MultiValueDictKeyError:
             return HttpResponseRedirect("/Users/add_services/")
+
+        bundle_form2=BundleServForm()
+        bundle_form2.bundle_services = service_name
+        for services in current_user.services.all():
+            for y in bundle_form2.bundle_services:
+                if services.name == y:
+                    print("Can't add duplicate services")
+                    return HttpResponseRedirect("/Users/cust_serv/")
+
+        for x in Service.objects.all():
+            for y in bundle_form2.bundle_services:
+                if x.name == y:
+                    current_user.services.add(x)
+                    current_user.balance += x.price
+                    current_user.save()
         print("0")
         # for services in Service.objects.all():
         #     if services.name == service_name:
@@ -371,17 +400,17 @@ def add_services(request):
         #         print("invalid service. Cannot add to your account")
 
         # if the service exists in user package, render page
-        for services in current_user.services.all():
-            if services.name == service_name:
-                print("Can't add duplicate services")
-                return HttpResponseRedirect("/Users/add_services/")
+       # for services in current_user.services.all():
+       #     if services.name == service_name:
+       #         print("Can't add duplicate services")
+       #         return HttpResponseRedirect("/Users/add_services/")
 
-        for services in Service.objects.all():
-            if services.name == service_name:
-                current_user.balance+=services.price
-                current_user.services.add(services)
-                current_user.save()
-                print ("added service successfully")
+       # for services in Service.objects.all():
+       #     if services.name == service_name:
+       #         current_user.balance+=services.price
+       #         current_user.services.add(services)
+       #         current_user.save()
+       #         print ("added service successfully")
 
 
 
@@ -460,7 +489,7 @@ def view_bill(request):
         cost += service.price
     for bundle in current_user.bundles.all():
         cost += bundle.price
-    return render(request, 'Users/view_bill.html', {'display_bundles': bundle_form.bundles.all(), 'display_services': bill_form.services, 'total':current_user.balance})
+    return render(request, 'Users/view_bill.html', {'term_fees': current_user.term_fees, 'display_bundles': bundle_form.bundles.all(), 'display_services': bill_form.services, 'total':current_user.balance})
 
 @login_required
 def delete_bundles(request):
@@ -473,19 +502,19 @@ def delete_bundles(request):
 
     if request.method == 'POST':
         try:
-            bundle = request.POST['bundle']
+            bundle = request.POST.getlist('bundle')
         except MultiValueDictKeyError:
             return HttpResponseRedirect("/Users/delete_bundle/")
 
-
-        newBundle = Bundle(name=bundle, description='', price=0, term_fee=0)
-        print ("test deleting package name: ")
-
-        for bundle in current_user.bundles.all():
-            if (bundle.name == newBundle.name):
-                current_user.bundles.remove(bundle)
-                current_user.balance-=bundle.price
-                current_user.save()
+        bundle_form2=RepForm()
+        bundle_form2.bundles = bundle
+        for x in Bundle.objects.all():
+            for y in bundle_form2.bundles:
+                if x.name == y:
+                    current_user.bundles.remove(x)
+                    current_user.balance -= x.price
+                    current_user.term_fees += x.term_fee
+                    current_user.save()
 
 
 
@@ -511,26 +540,30 @@ def delete_services(request):
 
     if request.method == 'POST':
         try:
-            package = request.POST['service']
+            package = request.POST.getlist('service')
         except MultiValueDictKeyError:
             return HttpResponseRedirect("/Users/delete_services/")
 
 
-        newPackage = Service(name=package, description='', price=0, term_fee=0)
-        print ("test deleting package name: ")
-        #adds package to users list of services
-         # current_user.services.add(newPackage)
+        bundle_form2=BundleServForm()
+        bundle_form2.bundle_services = package
+            #for services in userToChange.services.all():
+            #    for y in bundle_form2.bundle_services:
+            #         if services.name == y:
+            #             print("Can't add duplicate services")
+            #             return HttpResponseRedirect("/Users/cust_serv/")
 
-        for service in current_user.services.all():
-            if (service.name == newPackage.name):
-                current_user.services.remove(service)
-                current_user.balance-=service.price
-                current_user.save()
-
+        for x in Service.objects.all():
+            for y in bundle_form2.bundle_services:
+                if x.name == y:
+                    current_user.services.remove(x)
+                    current_user.balance -= x.price
+                    current_user.term_fees += x.term_fee
+                    current_user.save()
 
 
         #updates current users new attribute
-        return HttpResponseRedirect('/Users/display_services')
+        return HttpResponseRedirect('/Users/view_bill')
 
 
         #this grabs which package the user chose
@@ -768,6 +801,10 @@ def cust_serv(request):
                 for y in bundle_form2.bundle_services:
                     if x.name == y:
                         userToChange.services.remove(x)
+                        userToChange.balance -= x.price
+                        userToChange.balance += x.term_fee
+                        userToChange.save()
+
 
         elif button == 'Add Service':
             bundle_form2=BundleServForm()
@@ -782,6 +819,8 @@ def cust_serv(request):
                 for y in bundle_form2.bundle_services:
                     if x.name == y:
                         userToChange.services.add(x)
+                        userToChange.balance += x.price
+                        userToChange.save()
 
         elif button == 'Delete Bundle':
             bundle_form2=RepForm()
@@ -797,6 +836,9 @@ def cust_serv(request):
                 for y in bundle_form2.bundles:
                     if x.name == y:
                         userToChange.bundles.remove(x)
+                        userToChange.balance -= x.price
+                        userToChange.balance += x.term_fee
+                        userToChange.save()
 
         elif button == 'Add Bundle':
             bundle_form2=RepForm()
@@ -813,6 +855,8 @@ def cust_serv(request):
                 for y in bundle_form2.bundles:
                     if x.name == y:
                         userToChange.bundles.add(x)
+                        userToChange.balance += x.price
+                        userToChange.save()
 
         return render(request, 'Users/cust_serv.html', {'bundle_form': bundle_form.bundle_services.all(), 'customer_form': customer_form.users.all(), 'service_form': service_form.services.all()})
 

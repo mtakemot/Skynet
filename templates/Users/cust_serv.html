@@ -18,11 +18,11 @@
 
     <form id="bundle_form" method="post" action="/Users/cust_serv/">
     <table border="1" width="25%">
-    <th>Bundle</th> <th>Price</th>
+    <th>Bundle</th> <th>Price</th><th>Termination Fee</th>
         {% for bundle in bundle_form%}
             {% csrf_token %}
            <tr><td><input type = "checkbox" name = "bundle" value="{{ bundle.name }}">
-            {{bundle.name}}</td><td>{{ bundle.price }}</td></tr>
+            {{bundle.name}}</td><td>{{ bundle.price }}</td><td>{{ bundle.term_fee }}</td></tr>
 
         {% endfor %}<br/><br/>
     </table>
@@ -33,11 +33,11 @@
     </table>
     <form id="service_form" method="post" action="/Users/cust_serv/">
     <table border="1" width="25%">
-    <th>Service</th> <th>Price</th>
+    <th>Service</th> <th>Price</th> <th>Termination Fee</th>
         {% for service in service_form%}
             {% csrf_token %}
            <tr><td><input type = "checkbox" name = "service" value="{{ service.name }}">
-            {{service.name}}</td><td>{{ service.price }}</td></tr>
+            {{service.name}}</td><td>{{ service.price }}</td><td>{{ service.term_fee }}</td></tr>
 
         {% endfor %}<br/><br/>
     </table>

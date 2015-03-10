@@ -79,15 +79,16 @@
 
             <table class = "table-fill" >
                 <thead>
-                     <tr><th>Bundle</th><th>Price</th></tr>
+                     <tr><th>Bundle</th><th>Price</th><th>Termination Fee</th></tr>
                 </thead>
 
                 {% for bundle in bundle_form%}
                     <tbody class="table-hover">
                         <tr>
-                            <td><input type = "radio" name = "bundle" value="{{ bundle.name }}">
+                            <td><input type = "checkbox" name = "bundle" value="{{ bundle.name }}">
                                 {{bundle.name}}</td>
                             <td>${{ bundle.price }}</td>
+                            <td>${{ bundle.term_fee }}</td>
                         </tr>
                     </tbody>
                 {% endfor %}

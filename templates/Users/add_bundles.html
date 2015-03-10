@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <title>Packages</title>
     {% load static %}
-        <link rel="stylesheet" href="{% static 'add_services.css' %}">
+        <link rel="stylesheet" href="{% static 'add_bundles.css' %}">
         <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="{% static 'add_services.js' %}"></script>
+        <script src="{% static 'add_bundles.js' %}"></script>
 </head>
 <body>
 
@@ -31,9 +31,10 @@
          <ul>
              <li><a href="/Users/logout/">Logout</a></li>
              <li><a href="/Users">Back</a></li>
-             <li><a href="/Users/display_services/">View Subscriped Plans</a></li>
+             <li><a href="/Users/display_services/">View Subscribed Plans</a></li>
              <!--<li><a href="/Users/add_services/"> Add a Service</a></li>-->
              <li><a href="/Users/delete_services/"> Remove a Service</a></li>
+             <li><a href="/Users/delete_bundles/">Remove a Bundle</a></li>
              <li><a href="/Users/view_bill"> View Bill</a></li>
              <!---<li><a href="">Set courtesy notification threshold</a></li>--->
              <li><a href="/Users/restricted/">Restricted Page</a></li>
@@ -52,6 +53,7 @@
             Select a Bundle to Purchase<br>
         </h1>
     </div>
+    <div id = "bundles">
      <form id="bundle_form" method="post" action="/Users/add_bundles/">
      <table class="table-fill">
         <!--
@@ -79,10 +81,10 @@
         {% endfor %}
 
      </table>
-     <div class = "button">
+
             <input type="submit" name="submit" value="Purchase" />
-     </div>
     </form>
+    </div>
 
     </div>
 

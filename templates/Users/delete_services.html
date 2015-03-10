@@ -3,12 +3,58 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Current Services</title>
+    {% load static %}
+        <link rel="stylesheet" href="{% static 'delete_services.css' %}">
+        <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'delete_services.js' %}"></script>
 </head>
 <body>
-    <h1>
-        Select a package to delete:<br>
-    </h1>
-   <form id="service_form" method="post" action="/Users/delete_services/">
+
+    <div class="menu">
+
+      <!-- Menu icon -->
+      <div class="icon-close">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="/Users/" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
+        </div>
+
+         <ul>
+             <li><a href="/Users/logout/">Logout</a></li>
+             <li><a href="/Users">Back</a></li>
+             <li><a href="/Users/display_services/">View Subscriped Plans</a></li>
+             <li><a href="/Users/add_services/"> Add a Service</a></li>
+             <!---<li><a href="/Users/delete_services/"> Remove a Service</a></li>-->
+             <li><a href="/Users/view_bill"> View Bill</a></li>
+             <!----<li><a href="">Set courtesy notification threshold</a></li>--->
+             <li><a href="/Users/restricted/">Restricted Page</a></li>
+          </ul>
+
+    </div>
+
+    <div class="jumbotron">
+
+      <div class="icon-menu">
+          <i class="fa fa-bars"></i>
+        Menu
+      </div>
+
+    <div class = "table-title">
+        <h1>
+            Select a package to delete:<br>
+        </h1>
+    </div>
+
+    <div id = "service">
+        <form id="service_form" method="post" action="/Users/delete_services/">
         <!--
         <input type="radio" name="package" value="package 1">Package 1<br>
         <input type="radio" name="package" value="package 2">Package 2<br>
@@ -18,16 +64,36 @@
         <input type="submit" name="submit" value="Purchase" />
         -->
         {% csrf_token %}
-        <table border="1" width="25%">
-             <tr><th>Service</th><th>Price</th></tr>
+        <!------
+            <table border="1" width="25%">
+                 <tr><th>Service</th><th>Price</th></tr>
 
-        {% for service in service_form%}
-           <tr><td><input type = "radio" name = "service" value="{{ service.name }}">
-            {{service.name}}</td> <td>${{ service.price }}</td></tr>
+            {% for service in service_form%}
+                <tr><td><input type = "radio" name = "service" value="{{ service.name }}">
+                {{service.name}}</td> <td>${{ service.price }}</td></tr>
 
-        {% endfor %}<br/>
-        </table>
-        <input type="submit" name="submit" value="Submit" />
+            {% endfor %}<br/>
+            </table>
+        ------>
+
+            <table class = "table-fill" >
+                <thead>
+                     <tr><th>Service</th><th>Price</th></tr>
+                </thead>
+
+                {% for service in service_form%}
+                    <tbody class="table-hover">
+                        <tr>
+                            <td><input type = "radio" name = "service" value="{{ service.name }}">
+                                {{service.name}}</td>
+                            <td>${{ service.price }}</td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+
+            </table>
+            <input type="submit" name="submit" value="Submit" />
     </form>
+    </div>
 </body>
 </html>

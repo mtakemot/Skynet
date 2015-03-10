@@ -171,11 +171,11 @@
 
          <ul>
              <li><a href="/Users/logout/">Logout</a></li>
-             <li><a href="/Users/display_services/">View Subscriped Plans</a></li>
+             <li><a href="/Users/display_services/">View Subscribed Service</a></li>
              <li><a href="/Users/add_services/"> Add a Service</a></li>
              <li><a href="/Users/delete_services/"> Remove a Service</a></li>
              <li><a href="/Users/view_bill"> View Bill</a></li>
-             <li><a href="">Set courtesy notification threshold</a></li>
+             <!---<li><a href="">Set courtesy notification threshold</a></li>--->
              <li><a href="/Users/restricted/">Restricted Page</a></li>
           </ul>
 
@@ -192,22 +192,40 @@
         <div class="description0">
             <h1>Welcome back to Skynet, {{ user.username }}!</h1>
             <h2>You are a  {{ custType }} customer! </h2>
-            <form id="user_form" method="post" action="/Users/">
         </div>
 
-    <form id="user_form" method="post" action="/Users/">
-      {% csrf_token %}
-        <table border="1" width="25%">
-           <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
-           <tr><td align="right">Current Threshold Value: ${{ thresholdvalue}} </td></tr>
 
-           <tr><td align="right">
+        <div id = "set">
+            <form id="user_form" method="post" action="/Users/">
+                {% csrf_token %}
+                <!---<table border="1" width="25%">
+                    <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
+                    <tr><td align="right">Current Threshold Value: ${{ thresholdvalue}} </td></tr>
+
+                    <tr><td align="right">
                     <input type="number" name="maxVal"  min="0" max="99999" value=""/>
-                </td>
-           </tr>
-           <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
-        </table>
-    </form>
+                    </td>
+                    </tr>
+                    <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
+                </table> --->
+                <table class ="table-fill">
+                    <tbody class ="table-hover">
+                        <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
+                        <tr><td align="right">Current Threshold Value: ${{ thresholdvalue}} </td></tr>
+
+                        <tr><td align="right">
+                            <input type="number" name="maxVal"  min="0" max="99999" value=""/>
+                            </td>
+                        </tr>
+                    <!---<tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" />
+                    </td></tr>-->
+
+                    </tbody>
+                </table>
+
+                <input type="submit" name="submit" value="Update Your Balance Threshold" />
+            </form>
+        </div>
 
     </div>
 

@@ -311,13 +311,13 @@ def add_bundle(request):
             bundle_name = request.POST['bundle']
             print(bundle_name)
         except MultiValueDictKeyError:
-            return HttpResponseRedirect("/Users/add_services/")
+            return HttpResponseRedirect("/Users/add_bundles/")
 
 
         for bundle in current_user.bundles.all():
             if bundle.name == bundle_name:
                 print("Can't add duplicate bundles")
-                return HttpResponseRedirect("/Users/add_services/")
+                return HttpResponseRedirect("/Users/add_bundles/")
 
         for bundle in Bundle.objects.all():
             if bundle.name == bundle_name:

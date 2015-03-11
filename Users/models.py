@@ -84,7 +84,7 @@ class UserProfile(models.Model):
 
 def UserFactory(newUser):
     profile=UserProfile(user=newUser, username=newUser, fname=newUser.first_name,
-                                   lname=newUser.first_name, userEmail=newUser.email, website=newUser.website,
+                                   lname=newUser.last_name, userEmail=newUser.email, website=newUser.website,
                                    address=newUser.address, phoneNumber=newUser.phoneNumber, custType=newUser.custType)
     #profile.save(commit=False)
     return profile

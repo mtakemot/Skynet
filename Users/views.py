@@ -813,7 +813,7 @@ def market_rep(request):
 
         return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
                                                          'bundle_form': bundle_form.bundle_services.all()})
-                                                         #.bundle_services.all()})
+@login_required                                                    #.bundle_services.all()})
 def cust_serv(request):
     current_user = UserProfile.objects.get(user=request.user)
     if current_user.is_Service == False:
@@ -921,6 +921,7 @@ def cust_serv(request):
     else:
         return render(request, 'Users/cust_serv.html', {'bundle_form': bundle_form.bundle_services.all(), 'customer_form': customer_form.users.all(), 'service_form': service_form.services.all()})
 
+
 def customer_page(request, customer):
     current_user = UserProfile.objects.get(username=customer)
     print(customer)
@@ -942,9 +943,18 @@ def customer_page(request, customer):
     return render(request, 'Users/customer_page.html', {'Customer': current_user.username, 'services_form': current_user.services.all()})
     #only allow access to customers, redirect market rep and cust serv reps
 
+@login_required
 def customerInfoPage(request):
+
+    current_user = UserProfile.objects.get(user=request.user)
+    if current_user.is_Service == True or current_user.is_Market == True:
+        redirect = check_permission(current_user)
+        if(not redirect):
+            return HttpResponseRedirect("/Users/")
+        return redirect
+
     if request.method=='GET':
-        current_user = UserProfile.objects.get(user=request.user)
+
         customer_form = CustomerInfoForm
         customer_form.user = current_user
       #  customer_form.fname = current_user.fname

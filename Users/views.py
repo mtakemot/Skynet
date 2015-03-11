@@ -465,6 +465,7 @@ def display_services(request):
 def view_bill(request):
     current_user = UserProfile.objects.get(user=request.user)
 
+
     #only allow access to customers, redirect market rep and cust serv reps
     redirect = check_permission(current_user)
     if redirect!=False:
@@ -489,7 +490,17 @@ def view_bill(request):
         cost += service.price
     for bundle in current_user.bundles.all():
         cost += bundle.price
-    return render(request, 'Users/view_bill.html', {'term_fees': current_user.term_fees, 'display_bundles': bundle_form.bundles.all(), 'display_services': bill_form.services, 'total':current_user.balance})
+
+    if request.method == 'POST':
+        value = request.POST['maxVal']
+        #not sure what it means BUT,
+        if(value):
+            if(int(value)>=0):
+                temp = int(value)
+                current_user.threshold = temp
+                current_user.save()
+
+    return render(request, 'Users/view_bill.html', {'threshold':current_user.threshold, 'term_fees': current_user.term_fees, 'display_bundles': bundle_form.bundles.all(), 'display_services': bill_form.services, 'total':current_user.balance})
 
 @login_required
 def delete_bundles(request):

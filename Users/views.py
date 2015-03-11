@@ -394,7 +394,7 @@ def add_services(request):
             for y in bundle_form2.bundle_services:
                 if services.name == y:
                     print("Can't add duplicate services")
-                    return HttpResponseRedirect("/Users/cust_serv/")
+                    #return HttpResponseRedirect("/Users/cust_serv/")
 
         for x in Service.objects.all():
             for y in bundle_form2.bundle_services:
@@ -538,9 +538,9 @@ def delete_bundles(request):
         for x in Bundle.objects.all():
             for y in bundle_form2.bundles:
                 if x.name == y:
-                    current_user.bundles.remove(x)
                     current_user.balance -= x.price
                     current_user.term_fees += x.term_fee
+                    current_user.bundles.remove(x)
                     current_user.save()
 
 
@@ -583,6 +583,7 @@ def delete_services(request):
         for x in Service.objects.all():
             for y in bundle_form2.bundle_services:
                 if x.name == y:
+                    
                     current_user.services.remove(x)
                     current_user.balance -= x.price
                     current_user.term_fees += x.term_fee
@@ -839,6 +840,9 @@ def cust_serv(request):
 
         userToChange = UserProfile.objects.get(username=customer)
 
+        print(userToChange)
+        print(userToChange.balance)
+
         if button == 'Delete Service':
             bundle_form2=BundleServForm()
             bundle_form2.bundle_services = request.POST.getlist('service')
@@ -851,10 +855,17 @@ def cust_serv(request):
             for x in Service.objects.all():
                 for y in bundle_form2.bundle_services:
                     if x.name == y:
+                        try:
+                            userToChange.services.get(name=y)
+                        except:
+                            continue
+
+                        print(userToChange.balance)
                         userToChange.services.remove(x)
                         userToChange.balance -= x.price
-                        userToChange.balance += x.term_fee
+                        userToChange.term_fees += x.term_fee
                         userToChange.save()
+                        print(userToChange.balance)
 
 
         elif button == 'Add Service':
@@ -886,9 +897,13 @@ def cust_serv(request):
             for x in Bundle.objects.all():
                 for y in bundle_form2.bundles:
                     if x.name == y:
+                        try:
+                            userToChange.bundles.get(name=y)
+                        except:
+                            continue
                         userToChange.bundles.remove(x)
                         userToChange.balance -= x.price
-                        userToChange.balance += x.term_fee
+                        userToChange.term_fees   += x.term_fee
                         userToChange.save()
 
         elif button == 'Add Bundle':
@@ -904,7 +919,7 @@ def cust_serv(request):
 
             for x in Bundle.objects.all():
                 for y in bundle_form2.bundles:
-                    if x.name == y:
+                    if x.name == y and not x.deleted:
                         userToChange.bundles.add(x)
                         userToChange.balance += x.price
                         userToChange.save()

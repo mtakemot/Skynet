@@ -824,7 +824,7 @@ def cust_serv(request):
                 for y in bundle_form2.bundle_services:
                     if services.name == y:
                         print("Can't add duplicate services")
-                        return HttpResponseRedirect("/Users/cust_serv/")
+                        #return HttpResponseRedirect("/Users/cust_serv/")
 
             for x in Service.objects.all():
                 for y in bundle_form2.bundle_services:
@@ -860,7 +860,7 @@ def cust_serv(request):
                 for y in bundle_form2.bundles:
                     if bundle.name == y:
                         print("Can't add duplicate bundles")
-                        return HttpResponseRedirect("/Users/cust_serv/")
+                        #return HttpResponseRedirect("/Users/cust_serv/")
 
             for x in Bundle.objects.all():
                 for y in bundle_form2.bundles:

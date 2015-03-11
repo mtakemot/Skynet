@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<form id="customer_form" method="get" action="/Users/customer_info/">
+    <table border="1" width="25%">
+        <th colspan="2">Account Information</th>
+        {% csrf_token %}
+        <tr><td>Account Type</td><td>{{ customer_form.custType }}</td> </tr>
+        <tr><td>UserName</td><td>{{ customer_form.username }}</td> </tr>
+        <tr><td>First Name</td><td>{{ customer_form.fname }}</td></tr>
+        <tr><td>Last Name</td><td>{{ customer_form.lname }}</td></tr>
+        <tr><td>Email</td><td>{{ customer_form.userEmail }}</td></tr>
+        <tr><td>Phone Number</td><td>{{ customer_form.phoneNumber }}</td></tr>
+        <tr><td>Address</td><td>{{ customer_form.address }}</td></tr>
+
+
+    </table>
+
+</body>
+</html>

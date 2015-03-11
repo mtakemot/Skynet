@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, UserManager
 from django.template.defaultfilters import slugify
 from Packages.models import Service as serviceModels
 from Packages.models import Bundle as bundleModels
-from Rule.models import BusinessRules
+from Rule.models import balance_notify
 
 
 # Create your models here.
@@ -73,8 +73,10 @@ class UserProfile(models.Model):
     # check balance vs threshold and use rule obj method to verify if a notification
     # needs to be sent or not. Then, call userprofileobject.save()
     def save(self):
-        instance = BusinessRules()
+        #instance = BusinessRules()
        # instance.balance_notify()
+        balance_notify(self)
+
 
 
         super(UserProfile,self).save()
@@ -84,7 +86,7 @@ class UserProfile(models.Model):
 
 def UserFactory(newUser):
     profile=UserProfile(user=newUser, username=newUser, fname=newUser.first_name,
-                                   lname=newUser.first_name, userEmail=newUser.email, website=newUser.website,
+                                   lname=newUser.last_name, userEmail=newUser.email, website=newUser.website,
                                    address=newUser.address, phoneNumber=newUser.phoneNumber, custType=newUser.custType)
     #profile.save(commit=False)
     return profile

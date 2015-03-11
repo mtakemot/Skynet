@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile, UserFactory
-from Users.forms import CategoryForm, UserForm, UserProfileForm, RepForm, ServiceForm, DisplayForm, BillForm, BundleForm as bForm, BundleServForm, CustomerForm
+from Users.forms import CategoryForm, UserForm, UserProfileForm, RepForm, ServiceForm, DisplayForm, BillForm, BundleForm as bForm, BundleServForm, CustomerForm, CustomerInfoForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -328,7 +328,7 @@ def add_bundle(request):
             for y in bundle_form2.bundle_services:
                 if services.name == y:
                     print("Can't add duplicate services")
-                   # return HttpResponseRedirect("/Users/cust_serv/")
+                    return HttpResponseRedirect("/Users/add_bundles/")
 
         for x in Bundle.objects.all():
             for y in bundle_form2.bundle_services:
@@ -354,7 +354,7 @@ def add_bundle(request):
 
     else:
 
-        bundle_form = bForm();
+        bundle_form = bForm()
         bundle_form.bundles = Bundle.objects.all()
 
         for bundles in bundle_form.bundles:
@@ -394,7 +394,7 @@ def add_services(request):
             for y in bundle_form2.bundle_services:
                 if services.name == y:
                     print("Can't add duplicate services")
-                    return HttpResponseRedirect("/Users/cust_serv/")
+                    return HttpResponseRedirect("/Users/add_services/")
 
         for x in Service.objects.all():
             for y in bundle_form2.bundle_services:
@@ -508,13 +508,20 @@ def view_bill(request):
         cost += bundle.price
 
     if request.method == 'POST':
-        value = request.POST['maxVal']
-        #not sure what it means BUT,
-        if(value):
-            if(int(value)>=0):
-                temp = int(value)
-                current_user.threshold = temp
-                current_user.save()
+        button = request.POST['submit']
+        print("button pressed in view bill: " , button)
+        if button == 'Update Your Balance Threshold':
+            value = request.POST['maxVal']
+            #not sure what it means BUT,
+            if(value):
+                if(int(value)>=0):
+                    temp = int(value)
+                    current_user.threshold = temp
+                    current_user.save()
+        else:
+            print("paying off term_fees")
+            current_user.term_fees = 0
+            current_user.save()
 
     return render(request, 'Users/view_bill.html', {'threshold':current_user.threshold, 'term_fees': current_user.term_fees, 'display_bundles': bundle_form.bundles.all(), 'display_services': bill_form.services, 'total':current_user.balance})
 
@@ -538,9 +545,9 @@ def delete_bundles(request):
         for x in Bundle.objects.all():
             for y in bundle_form2.bundles:
                 if x.name == y:
-                    current_user.bundles.remove(x)
                     current_user.balance -= x.price
                     current_user.term_fees += x.term_fee
+                    current_user.bundles.remove(x)
                     current_user.save()
 
 
@@ -583,6 +590,7 @@ def delete_services(request):
         for x in Service.objects.all():
             for y in bundle_form2.bundle_services:
                 if x.name == y:
+
                     current_user.services.remove(x)
                     current_user.balance -= x.price
                     current_user.term_fees += x.term_fee
@@ -627,10 +635,11 @@ def market_rep(request):
 
             service_name = request.POST['name']
             if service_name == '':
-                #return_thisPage(request, 'market_rep', service_form.services.all(), bundle_form.bundle_services.all())
+                return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+                                                         'bundle_form': bundle_form.bundle_services.all()})
 
-                if render!='':
-                    return render
+                #if render!='':
+                    #return render
 
             service_description = request.POST['description']
             if service_description == '':
@@ -657,6 +666,7 @@ def market_rep(request):
                                  price=service_price,term_fee=service_term, duration=service_duration)
 
             newService.save()
+
             service_form = DisplayForm()
             service_form.services = Service.objects.all()
             bundle_form = ServiceForm()
@@ -767,20 +777,27 @@ def market_rep(request):
         elif button == 'Create Bundle':
             bundle_form2=BundleServForm()
 
-            bundle_name = request.POST['name']
-            bundle_description = request.POST['description']
-            bundle_price = request.POST['price']
-            bundle_term = request.POST['term']
-            bundle_duration = request.POST['duration']
+            try:
+                bundle_name = request.POST['name']
+                bundle_description = request.POST['description']
+                bundle_price = request.POST['price']
+                bundle_term = request.POST['term']
+                bundle_duration = request.POST['duration']
+            except:
+                HttpResponseRedirect('Users/market_rep.html')
 
             print(bundle_name)
 
             bundle_form2.bundle_services = request.POST.getlist('bservice')
 
-            newBundle = Bundle(name = bundle_name, description=bundle_description,price=bundle_price,
+            try:
+                newBundle = Bundle(name = bundle_name, description=bundle_description,price=bundle_price,
                                term_fee=bundle_term, duration=bundle_duration)
 
-            newBundle.save()
+                newBundle.save()
+            except ValueError:
+                HttpResponseRedirect('Users/market_rep.html')
+
 
             for x in Service.objects.all():
                 for y in bundle_form2.bundle_services:
@@ -804,7 +821,7 @@ def market_rep(request):
 
         return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
                                                          'bundle_form': bundle_form.bundle_services.all()})
-                                                         #.bundle_services.all()})
+@login_required                                                    #.bundle_services.all()})
 def cust_serv(request):
     current_user = UserProfile.objects.get(user=request.user)
     if current_user.is_Service == False:
@@ -830,6 +847,9 @@ def cust_serv(request):
 
         userToChange = UserProfile.objects.get(username=customer)
 
+        print(userToChange)
+        print(userToChange.balance)
+
         if button == 'Delete Service':
             bundle_form2=BundleServForm()
             bundle_form2.bundle_services = request.POST.getlist('service')
@@ -842,10 +862,17 @@ def cust_serv(request):
             for x in Service.objects.all():
                 for y in bundle_form2.bundle_services:
                     if x.name == y:
+                        try:
+                            userToChange.services.get(name=y)
+                        except:
+                            continue
+
+                        print(userToChange.balance)
                         userToChange.services.remove(x)
                         userToChange.balance -= x.price
-                        userToChange.balance += x.term_fee
+                        userToChange.term_fees += x.term_fee
                         userToChange.save()
+                        print(userToChange.balance)
 
 
         elif button == 'Add Service':
@@ -877,9 +904,13 @@ def cust_serv(request):
             for x in Bundle.objects.all():
                 for y in bundle_form2.bundles:
                     if x.name == y:
+                        try:
+                            userToChange.bundles.get(name=y)
+                        except:
+                            continue
                         userToChange.bundles.remove(x)
                         userToChange.balance -= x.price
-                        userToChange.balance += x.term_fee
+                        userToChange.term_fees   += x.term_fee
                         userToChange.save()
 
         elif button == 'Add Bundle':
@@ -895,7 +926,7 @@ def cust_serv(request):
 
             for x in Bundle.objects.all():
                 for y in bundle_form2.bundles:
-                    if x.name == y:
+                    if x.name == y and not x.deleted:
                         userToChange.bundles.add(x)
                         userToChange.balance += x.price
                         userToChange.save()
@@ -911,6 +942,7 @@ def cust_serv(request):
 
     else:
         return render(request, 'Users/cust_serv.html', {'bundle_form': bundle_form.bundle_services.all(), 'customer_form': customer_form.users.all(), 'service_form': service_form.services.all()})
+
 
 def customer_page(request, customer):
     current_user = UserProfile.objects.get(username=customer)
@@ -932,6 +964,31 @@ def customer_page(request, customer):
 
     return render(request, 'Users/customer_page.html', {'Customer': current_user.username, 'services_form': current_user.services.all()})
     #only allow access to customers, redirect market rep and cust serv reps
+
+@login_required
+def customerInfoPage(request):
+
+    current_user = UserProfile.objects.get(user=request.user)
+    if current_user.is_Service == True or current_user.is_Market == True:
+        redirect = check_permission(current_user)
+        if(not redirect):
+            return HttpResponseRedirect("/Users/")
+        return redirect
+
+    if request.method=='GET':
+
+        customer_form = CustomerInfoForm
+        customer_form.user = current_user
+      #  customer_form.fname = current_user.fname
+      #  customer_form.lname = current_user.lname
+      #  customer_form.address = current_user.address
+      #  customer_form.phoneNumber = current_user.phoneNumber
+
+        return render(request, 'customer_info.html', {'customer_form': current_user})
+    else:
+        return HttpResponseRedirect('/Users/')
+    #return render(request, '/Users/customer_info.html',{'Customer': customer_form})
+
 
 
 

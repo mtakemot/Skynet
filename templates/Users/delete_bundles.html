@@ -79,7 +79,7 @@
 
             <table class = "table-fill" >
                 <thead>
-                     <tr><th>Bundle</th><th>Price</th><th>Termination Fee</th></tr>
+                     <tr><th>Bundle</th><th>Price</th><th>Termination Fee</th> <th>Duration</th></tr>
                 </thead>
 
                 {% for bundle in bundle_form%}
@@ -89,6 +89,7 @@
                                 {{bundle.name}}</td>
                             <td>${{ bundle.price }}</td>
                             <td>${{ bundle.term_fee }}</td>
+                            <td>{{ bundle.duration }} Months</td>
                         </tr>
                     </tbody>
                 {% endfor %}

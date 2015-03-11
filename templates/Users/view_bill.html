@@ -103,7 +103,8 @@
             <thead>
                 <tr><th>Service</th>
                 <th>Price</th>
-                <th>Termination Fee</th></tr>
+                <th>Termination Fee</th>
+                <th>Duration</th></tr>
             </thead>
 
             {% for package in display_services %}
@@ -112,6 +113,7 @@
                         <td>{{package}}</td>
                         <td>${{package.price}}</td>
                         <td>${{package.term_fee}}</td>
+                        <td>{{package.duration }} Months</td>
                     </tr>
                 </tbody>
             {% endfor %}
@@ -129,6 +131,7 @@
                     <th>Bundles</th>
                     <th>Price</th>
                     <th>Termination Fee</th>
+                    <th>Duration</th>
                 </tr>
             </thead>
 
@@ -138,6 +141,7 @@
                         <td>{{bundle}}</td>
                         <td>${{bundle.price}}</td>
                         <td>${{bundle.term_fee}}</td>
+                        <td>{{ bundle.duration }} Months</td>
                     </tr>
                 </tbody>
             {% endfor %}

@@ -8,7 +8,7 @@
     <a href="/Users/register/">Register a new customer</a>
     <form id="customer_form" method="post" action="/Users/cust_serv/">
 
-    <table border="1" width="25%">
+    <table border="1" width="32%">
     <th>Customers</th><th>Services</th><th>Bundles</th>
          {% csrf_token %}
          {%  for customer in customer_form %}
@@ -16,13 +16,27 @@
          {% endfor %}
 
 
+    <form id="service_form" method="post" action="/Users/cust_serv/">
+    <table border="1" width="32%">
+    <th>Service</th> <th>Price</th> <th>Termination Fee</th> <th>Duration</th>
+        {% for service in service_form%}
+            {% csrf_token %}
+           <tr><td><input type = "checkbox" name = "service" value="{{ service.name }}">
+            {{service.name}}</td><td>{{ service.price }}</td><td>{{ service.term_fee }}</td><td>{{service.duration}} Months</td></tr>
+
+        {% endfor %}<br/><br/>
+    </table>
+        <input type="submit" name="submit" value="Delete Service">
+        <input type="submit" name="submit" value="Add Service">
+
+
     <form id="bundle_form" method="post" action="/Users/cust_serv/">
-    <table border="1" width="25%">
-    <th>Bundle</th> <th>Price</th><th>Termination Fee</th>
+    <table border="1" width="32%">
+    <th>Bundle</th> <th>Price</th><th>Termination Fee</th> <th>Duration</th>
         {% for bundle in bundle_form%}
             {% csrf_token %}
            <tr><td><input type = "checkbox" name = "bundle" value="{{ bundle.name }}">
-            {{bundle.name}}</td><td>{{ bundle.price }}</td><td>{{ bundle.term_fee }}</td></tr>
+            {{bundle.name}}</td><td>{{ bundle.price }}</td><td>{{ bundle.term_fee }}</td> <td>{{ bundle.duration }} Months</td></tr>
 
         {% endfor %}<br/><br/>
     </table>
@@ -31,18 +45,6 @@
 
 
     </table>
-    <form id="service_form" method="post" action="/Users/cust_serv/">
-    <table border="1" width="25%">
-    <th>Service</th> <th>Price</th> <th>Termination Fee</th>
-        {% for service in service_form%}
-            {% csrf_token %}
-           <tr><td><input type = "checkbox" name = "service" value="{{ service.name }}">
-            {{service.name}}</td><td>{{ service.price }}</td><td>{{ service.term_fee }}</td></tr>
-
-        {% endfor %}<br/><br/>
-    </table>
-        <input type="submit" name="submit" value="Delete Service">
-        <input type="submit" name="submit" value="Add Service">
 
     </form>
     </form>

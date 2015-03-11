@@ -80,7 +80,7 @@
 
             <table class = "table-fill" >
                 <thead>
-                     <tr><th>Service</th><th>Price</th><th>Termination Fee</th></tr>
+                     <tr><th>Service</th><th>Price</th><th>Termination Fee</th> <th>Duration</th></tr>
                 </thead>
 
                 {% for service in service_form%}
@@ -90,6 +90,7 @@
                                 {{service.name}}</td>
                             <td>${{ service.price }}</td>
                             <td>${{ service.term_fee }}</td>
+                            <td>{{ service.duration }} Months</td>
                         </tr>
                     </tbody>
                 {% endfor %}

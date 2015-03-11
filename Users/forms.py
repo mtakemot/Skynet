@@ -89,9 +89,10 @@ class ServiceForm(forms.ModelForm):
     description = forms.CharField(max_length=250)
     price = forms.IntegerField()
     term_fee = forms.IntegerField()
+    duration = forms.IntegerField()
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration',)
 
 #class BundleForm(forms.ModelForm):
     #name = forms.CharField(max_length=123, )
@@ -108,13 +109,13 @@ class BundleForm(forms.ModelForm):
     bundles = forms.CharField(max_length=120, label="Current Bundles")
     class Meta:
         model = Bundle
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 class BillForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 #class BundleForm(forms.ModelForm):
     #bundles = forms.CharField(max_length=120, label="Current Bundles")
@@ -126,13 +127,13 @@ class DisplayForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 class DeleteServiceForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 class CustomerForm(forms.ModelForm):
     users = forms.CharField(max_length=5000, label="Current Users")

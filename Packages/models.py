@@ -7,6 +7,7 @@ class Service(models.Model):
     description = models.CharField(max_length=250)
     price = models.IntegerField(default=0)
     term_fee = models.IntegerField(default=150)
+    duration = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -16,7 +17,10 @@ class Bundle(models.Model):
     description = models.CharField(max_length=250)
     price = models.IntegerField(default=0)
     term_fee = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0)
     bundle_services = models.ManyToManyField(Service, blank=True, )
+
+
 
     def __str__(self):
         return self.name

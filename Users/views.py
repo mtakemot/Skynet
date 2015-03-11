@@ -632,9 +632,13 @@ def market_rep(request):
                                                          'bundle_form': bundle_form.bundle_services.all()})
 
 
+            service_duration = request.POST['duration']
+            if service_term =='':
+                return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+                                                         'bundle_form': bundle_form.bundle_services.all()})
 
             newService = Service(name=service_name,description=service_description,
-                                 price=service_price,term_fee=service_term)
+                                 price=service_price,term_fee=service_term, duration=service_duration)
 
             newService.save()
             service_form = DisplayForm()
@@ -741,13 +745,14 @@ def market_rep(request):
             bundle_description = request.POST['description']
             bundle_price = request.POST['price']
             bundle_term = request.POST['term']
+            bundle_duration = request.POST['duration']
 
             print(bundle_name)
 
             bundle_form2.bundle_services = request.POST.getlist('bservice')
 
             newBundle = Bundle(name = bundle_name, description=bundle_description,price=bundle_price,
-                               term_fee=bundle_term,)
+                               term_fee=bundle_term, duration=bundle_duration)
 
             newBundle.save()
 

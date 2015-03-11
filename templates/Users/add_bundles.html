@@ -67,7 +67,7 @@
         {% csrf_token %}
         <!---<table border="1" width="25%">--->
         <thead>
-             <tr><th>Bundle</th><th>Price</th></tr>
+             <tr><th>Bundle</th><th>Price</th><th>Duration</th></tr>
         </thead>
 
         {% for bundle in bundle_form%}
@@ -76,6 +76,7 @@
                     <td><input type = "checkbox" name = "bundle" value="{{ bundle.name }}">
                                 {{bundle.name}}</td>
                     <td>${{ bundle.price }}</td>
+                    <td>{{ bundle.duration }} Months</td>
                 </tr>
             </tbody>
         {% endfor %}

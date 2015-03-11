@@ -674,9 +674,12 @@ def market_rep(request):
             for services in Service.objects.all():
                 if services.name == package_name:
                     package = services
-                    print(package)
-                    Service.objects.filter(name=package_name).delete()
-                    print("deleting Service object with name: ", package_name)
+                    if((check_if_any_users_subscribed(services.name))):
+                        Service.objects.filter(name=package_name).deleted = True
+                    else:
+                        print(package)
+                        Service.objects.filter(name=package_name).delete()
+                        print("deleting Service object with name: ", package_name)
 
 
 
@@ -927,6 +930,16 @@ def check_permission(UserProfile):
 
     else:
         return False
+
+def check_if_any_users_subscribed(ServicesName):
+    allUsers = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
+    for user in allUsers:
+        for service in user:
+            if(service.name == ServicesName):
+                return True
+
+    return False
+
 
 #def validate_views(obj, ):
     #if render_loc!='':

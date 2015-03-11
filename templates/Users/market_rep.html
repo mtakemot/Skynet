@@ -19,11 +19,11 @@
         -->
         {% csrf_token %}
         <table border="1" width="25%">
-             <tr><th>Service</th><th>Price</th><th>Duration</th></tr>
+             <tr><th>Service</th><th>Price</th><th>Duration</th><th>Legacy Plan </th></tr>
 
         {% for service in service_form%}
            <tr><td><input type = "radio" name = "service" value="{{ service.name }}">
-            {{ service.name }}</td> <td>${{ service.price }}</td> <td>{{ service.duration }} Months</td></tr>
+            {{ service.name }}</td> <td>${{ service.price }}</td> <td>{{ service.duration }} Months</td> <td>{{ service.deleted }}</td></tr>
 
         {% endfor %}<br/>
         </table>
@@ -62,14 +62,15 @@
         -->
         {% csrf_token %}
         <table border="1" width="50%">
-             <tr><th>Bundle</th><th>Services</th><th>Price</th><th>Duration</th></tr>
+             <tr><th>Bundle</th><th>Services</th><th>Price</th><th>Duration</th> <th>Legacy Plan </th></tr>
 
         {% for bundle in bundle_form%}
            <tr><td><input type = "radio" name = "bundle" value="{{ bundle.name }}">
             {{bundle.name}}</td>
                <td> {{bundle.get_services }}</td>
            <td>${{ bundle.price }}</td>
-           <td>{{ bundle.duration }} Months</td></tr>
+           <td>{{ bundle.duration }} Months</td>
+           <td>{{ bundle.deleted }}</td></tr>
 
         {% endfor %}<br/>
         </table>

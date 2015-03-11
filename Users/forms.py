@@ -92,9 +92,10 @@ class ServiceForm(forms.ModelForm):
     price = forms.IntegerField()
     term_fee = forms.IntegerField()
     duration = forms.IntegerField()
+    deleted = forms.BooleanField()
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee', 'duration',)
+        fields = ('name', 'description', 'price', 'term_fee', 'duration', 'deleted')
 
 #class BundleForm(forms.ModelForm):
     #name = forms.CharField(max_length=123, )

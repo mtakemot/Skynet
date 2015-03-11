@@ -328,7 +328,7 @@ def add_bundle(request):
             for y in bundle_form2.bundle_services:
                 if services.name == y:
                     print("Can't add duplicate services")
-                    return HttpResponseRedirect("/Users/cust_serv/")
+                   # return HttpResponseRedirect("/Users/cust_serv/")
 
         for x in Bundle.objects.all():
             for y in bundle_form2.bundle_services:
@@ -357,8 +357,12 @@ def add_bundle(request):
         bundle_form = bForm();
         bundle_form.bundles = Bundle.objects.all()
 
+        for bundles in bundle_form.bundles:
+            if bundles.deleted==False:
+                print(bundles)
 
-        return render(request, 'Users/add_bundles.html', {'bundle_form': bundle_form.bundles.all()})
+
+        return render(request, 'Users/add_bundles.html', {'bundle_form': bundle_form.bundles.filter(deleted=False)})
 
 
 @login_required
@@ -447,11 +451,15 @@ def add_services(request):
 
         #passing to the HTML ALL the contents in the Service database
         service_form.services = Service.objects.all()
+
         #bundle_form = bForm();
         #bundle_form.bundles = Bundle.objects.all()
+        for service in service_form.services:
+            if service.deleted==False:
+                print(service)
+        #print(service_form.services.filter(deleted=False))
 
-
-        return render(request, 'Users/add_services.html', {'service_form': service_form.services.all()})
+        return render(request, 'Users/add_services.html', {'service_form': service_form.services.filter(deleted=False)})
 
 @login_required
 def display_services(request):
@@ -674,9 +682,15 @@ def market_rep(request):
             for services in Service.objects.all():
                 if services.name == package_name:
                     package = services
-                    print(package)
-                    Service.objects.filter(name=package_name).delete()
-                    print("deleting Service object with name: ", package_name)
+                    if((checkUsersforSubscribedService(services.name))):
+                        for service in (Service.objects.filter(name=package_name)):
+                            service.deleted=True
+                            print(service)
+                            service.save()
+                    else:
+                        print(package)
+                        Service.objects.filter(name=package_name).delete()
+                        print("deleting Service object with name: ", package_name)
 
 
 
@@ -698,10 +712,14 @@ def market_rep(request):
             print("deleting bundle: ", bundle_name)
             for bundle in Bundle.objects.all():
                 if bundle.name == bundle_name:
-                    package = bundle
-                    print(package)
-                    Bundle.objects.filter(name=bundle_name).delete()
-                    print("deleting bundle object with name: ", bundle_name)
+                    if((checkUserforSuscbibedBundle(bundle.name))):
+                        for bundles in (Bundle.objects.filter(name=bundle_name)):
+                            bundles.deleted=True
+                            print(bundles)
+                            bundles.save()
+                    else:
+                        Bundle.objects.filter(name=bundle_name).delete()
+                        print("deleting bundle object with name: ", bundle_name)
 
             current_user = UserProfile.objects.get(user=request.user)
             current_user.save()
@@ -841,7 +859,7 @@ def cust_serv(request):
 
             for x in Service.objects.all():
                 for y in bundle_form2.bundle_services:
-                    if x.name == y:
+                    if x.name == y and  not x.deleted:
                         userToChange.services.add(x)
                         userToChange.balance += x.price
                         userToChange.save()
@@ -928,6 +946,25 @@ def check_permission(UserProfile):
     else:
         return False
 
+def checkUsersforSubscribedService(ServicesName):
+    allUsers = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
+    for user in allUsers:
+        for service in user.services.all():
+            if(service.name == ServicesName):
+                #service.deleted=True
+                return True
+
+    return False
+
+def checkUserforSuscbibedBundle(BundleName):
+    allUsers = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
+    for user in allUsers:
+        for bundles in user.bundles.all():
+            if(bundles.name == BundleName):
+                #service.deleted=True
+                return True
+
+    return False
 #def validate_views(obj, ):
     #if render_loc!='':
         #return render_loc

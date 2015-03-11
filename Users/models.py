@@ -74,7 +74,7 @@ class UserProfile(models.Model):
     # needs to be sent or not. Then, call userprofileobject.save()
     def save(self):
         instance = BusinessRules()
-        #instance.balance_notify(self)
+       # instance.balance_notify()
 
 
         super(UserProfile,self).save()

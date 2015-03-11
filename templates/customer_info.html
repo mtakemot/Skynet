@@ -1,25 +1,73 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>Information</title>
+    {% load static %}
+        <link rel="stylesheet" href="{% static 'customer_info.css' %}">
+        <link rel="stylesheet" href="{% static '/bootstrap/dist/css/bootstrap.min.css' %}" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'customer_info.js' %}"></script>
 </head>
 <body>
 
-<form id="customer_form" method="get" action="/Users/customer_info/">
-    <table border="1" width="25%">
-        <th colspan="2">Account Information</th>
-        {% csrf_token %}
-        <tr><td>Account Type</td><td>{{ customer_form.custType }}</td> </tr>
-        <tr><td>UserName</td><td>{{ customer_form.username }}</td> </tr>
-        <tr><td>First Name</td><td>{{ customer_form.fname }}</td></tr>
-        <tr><td>Last Name</td><td>{{ customer_form.lname }}</td></tr>
-        <tr><td>Email</td><td>{{ customer_form.userEmail }}</td></tr>
-        <tr><td>Phone Number</td><td>{{ customer_form.phoneNumber }}</td></tr>
-        <tr><td>Address</td><td>{{ customer_form.address }}</td></tr>
+<div class="menu">
 
+      <!-- Menu icon -->
+      <div class="icon-close">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="/Users/" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
+        </div>
+
+         <ul>
+             <li><a href="/Users/logout/">Logout</a></li>
+             <li><a href="/Users">Back</a></li>
+             <!-- <li><a href="/Users/display_services/">View Subscriped Plans</a></li> -->
+             <li><a href="/Users/add_services/"> Add a Service</a></li>
+             <li><a href="/Users/delete_services/"> Remove a Service</a></li>
+             <li><a href="/Users/add_bundles/">Add a Bundle</a></li>
+             <li><a href="/Users/delete_bundles/">Remove a Bundle</a></li>
+             <li><a href="/Users/view_bill"> View Bill</a></li>
+             <!---<li><a href="">Set courtesy notification threshold</a></li>--->
+             <li><a href="/Users/restricted/">Restricted Page</a></li>
+          </ul>
+
+   </div>
+
+<div class="icon-menu">
+          <i class="fa fa-bars"></i>
+        Menu
+      </div>
+
+<div class="table-title">
+        <h1>
+            Select a Bundle to Purchase<br>
+        </h1>
+    </div>
+<div id = "info">
+<form id="customer_form" method="get" action="/Users/customer_info/">
+    <table class = "table-fill">
+        {% csrf_token %}
+        <tbody class = "table-hover">
+            <tr><td>Account Type</td><td>{{ customer_form.custType }}</td> </tr>
+            <tr><td>UserName</td><td>{{ customer_form.username }}</td> </tr>
+            <tr><td>First Name</td><td>{{ customer_form.fname }}</td></tr>
+            <tr><td>Last Name</td><td>{{ customer_form.lname }}</td></tr>
+            <tr><td>Email</td><td>{{ customer_form.userEmail }}</td></tr>
+            <tr><td>Phone Number</td><td>{{ customer_form.phoneNumber }}</td></tr>
+            <tr><td>Address</td><td>{{ customer_form.address }}</td></tr>
+        </tbody>
 
     </table>
-
+</div>
 </body>
 </html>

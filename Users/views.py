@@ -627,10 +627,11 @@ def market_rep(request):
 
             service_name = request.POST['name']
             if service_name == '':
-                #return_thisPage(request, 'market_rep', service_form.services.all(), bundle_form.bundle_services.all())
+                return render(request, 'Users/market_rep.html', {'service_form': service_form.services.all(),
+                                                         'bundle_form': bundle_form.bundle_services.all()})
 
-                if render!='':
-                    return render
+                #if render!='':
+                    #return render
 
             service_description = request.POST['description']
             if service_description == '':
@@ -657,6 +658,7 @@ def market_rep(request):
                                  price=service_price,term_fee=service_term, duration=service_duration)
 
             newService.save()
+
             service_form = DisplayForm()
             service_form.services = Service.objects.all()
             bundle_form = ServiceForm()
@@ -767,20 +769,27 @@ def market_rep(request):
         elif button == 'Create Bundle':
             bundle_form2=BundleServForm()
 
-            bundle_name = request.POST['name']
-            bundle_description = request.POST['description']
-            bundle_price = request.POST['price']
-            bundle_term = request.POST['term']
-            bundle_duration = request.POST['duration']
+            try:
+                bundle_name = request.POST['name']
+                bundle_description = request.POST['description']
+                bundle_price = request.POST['price']
+                bundle_term = request.POST['term']
+                bundle_duration = request.POST['duration']
+            except:
+                HttpResponseRedirect('Users/market_rep.html')
 
             print(bundle_name)
 
             bundle_form2.bundle_services = request.POST.getlist('bservice')
 
-            newBundle = Bundle(name = bundle_name, description=bundle_description,price=bundle_price,
+            try:
+                newBundle = Bundle(name = bundle_name, description=bundle_description,price=bundle_price,
                                term_fee=bundle_term, duration=bundle_duration)
 
-            newBundle.save()
+                newBundle.save()
+            except ValueError:
+                HttpResponseRedirect('Users/market_rep.html')
+
 
             for x in Service.objects.all():
                 for y in bundle_form2.bundle_services:

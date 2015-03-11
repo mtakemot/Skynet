@@ -10,7 +10,7 @@
     <table border="1" width="25%">
         <th colspan="2">Account Information</th>
         {% csrf_token %}
-
+        <tr><td>Account Type</td><td>{{ customer_form.custType }}</td> </tr>
         <tr><td>UserName</td><td>{{ customer_form.username }}</td> </tr>
         <tr><td>First Name</td><td>{{ customer_form.fname }}</td></tr>
         <tr><td>Last Name</td><td>{{ customer_form.lname }}</td></tr>

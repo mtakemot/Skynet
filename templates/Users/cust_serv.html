@@ -14,7 +14,36 @@
         <script src="{% static 'add_bundles.js' %}"></script>
 </head>
 <body>
-    <a href="/Users/register/">Register a new customer</a>
+
+    <div class="menu">
+
+      <!-- Menu icon -->
+      <div class="icon-close">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+        <div class = "logo">
+            <a href ="/Users/" class="logo-icon">
+                <img src="http://media.cylex.com.mx/1150/4184/logo/logo.jpg">
+            </a>
+        </div>
+
+         <ul>
+             <li><a href="/Users/logout/">Logout</a></li>
+             <li><a href="/Users/register/">Register a new customer</a></li>
+             <li><a href="/Users/restricted/">Restricted Page</a></li>
+          </ul>
+
+    </div>
+
+    <div class="jumbotron">
+
+      <div class="icon-menu">
+          <i class="fa fa-bars"></i>
+        Menu
+      </div>
+
+    <div id = "service">
     <form id="customer_form" method="post" action="/Users/cust_serv/">
 
     <table border="1" width="32%">
@@ -58,5 +87,8 @@
     </form>
     </form>
     </form>
+
+    </div>
+    </div>
 </body>
 </html>

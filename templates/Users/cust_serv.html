@@ -11,7 +11,7 @@
         <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:700' rel='stylesheet' type='text/css'>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="{% static 'add_bundles.js' %}"></script>
+        <script src="{% static 'cust_serv.js' %}"></script>
 </head>
 <body>
 
@@ -46,43 +46,51 @@
     <div id = "service">
     <form id="customer_form" method="post" action="/Users/cust_serv/">
 
-    <table border="1" width="32%">
-    <th>Customers</th><th>Services</th><th>Bundles</th>
+    <table class = "table-fill">
+        <thead>
+            <th>Customers</th><th>Services</th><th>Bundles</th>
+         </thead>
          {% csrf_token %}
+         <tbody class = "table-hover">
          {%  for customer in customer_form %}
              <tr><td><input type="radio" name="customer" value= "{{customer}}"> {{ customer }}</td><td>{{ customer.get_services }}</td><td>{{ customer.get_bundles }}</td></tr>
          {% endfor %}
-
+        </tbody>
+    </table>
 
     <form id="service_form" method="post" action="/Users/cust_serv/">
-    <table border="1" width="32%">
+    <table class = "table-fill">
+    <thead>
     <th>Service</th> <th>Price</th> <th>Termination Fee</th> <th>Duration</th> <th>Legacy Plan</th>
+    </thead>
         {% for service in service_form%}
             {% csrf_token %}
+            <tbody class = "table-hover">
            <tr><td><input type = "checkbox" name = "service" value="{{ service.name }}">
             {{service.name}}</td><td>{{ service.price }}</td><td>{{ service.term_fee }}</td><td>{{service.duration}} Months</td> <td>{{ service.deleted }}</td></tr>
-
-        {% endfor %}<br/><br/>
+            </tbody>
+        {% endfor %}
     </table>
+
         <input type="submit" name="submit" value="Delete Service">
         <input type="submit" name="submit" value="Add Service">
 
 
     <form id="bundle_form" method="post" action="/Users/cust_serv/">
-    <table border="1" width="32%">
+    <table class = "table-fill">
+    <thead>
     <th>Bundle</th> <th>Price</th><th>Termination Fee</th> <th>Duration</th> <th>Legacy Plan</th>
+    </thead>
         {% for bundle in bundle_form%}
             {% csrf_token %}
+            <tbody class = "table-hover">
            <tr><td><input type = "checkbox" name = "bundle" value="{{ bundle.name }}">
             {{bundle.name}}</td><td>{{ bundle.price }}</td><td>{{ bundle.term_fee }}</td> <td>{{ bundle.duration }} Months</td> <td>{{ bundle.deleted }}</td></tr>
-
-        {% endfor %}<br/><br/>
+            </tbody>
+        {% endfor %}
     </table>
         <input type="submit" name="submit" value="Delete Bundle">
         <input type="submit" name="submit" value="Add Bundle">
-
-
-    </table>
 
     </form>
     </form>

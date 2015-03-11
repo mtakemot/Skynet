@@ -117,6 +117,7 @@ div.table-title {
   border-collapse: collapse;
   height: 200px;
   margin: auto;
+    margin-bottom: 10px;
   max-width: 600px;
   padding:5px;
   width: 100%;
@@ -251,32 +252,7 @@ td.text-right {
   background-color: #FF0000;
 }
 
-#bundle form input[type="submit"] {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  background-color: #00b0ff;
-  color: #eee;
-  font-weight: bold;
-  margin-bottom: 2em;
-  text-transform: uppercase;
-  width: 280px;
-    padding: 0px;
-    text-align: center;
-
-    border: none;
-  font-family: 'Open Sans', Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5em;
-    margin-top: 10px;
-    margin-left: 332px;
-}
-
-#bundle form input[type="submit"]:hover {
-  background-color: #FF0000;
-}
-
-#bundle form input[value="Add Bundle Service"] {
+#service form input[value="Add Bundle"] {
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -297,9 +273,36 @@ td.text-right {
     margin-left: 10px;
 }
 
-#bundle form input[value="Add Bundle Service"]:hover {
+#service form input[value="Add Bundle"]:hover {
   background-color: #FF0000;
 }
+
+
+#service form input[value="Add Service"] {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #00b0ff;
+  color: #eee;
+  font-weight: bold;
+  margin-bottom: 2em;
+  text-transform: uppercase;
+  width: 280px;
+    padding: 0px;
+    text-align: center;
+
+    border: none;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#service form input[value="Add Service"]:hover {
+  background-color: #FF0000;
+}
+
 
 .table {
     margin-top: 10px;

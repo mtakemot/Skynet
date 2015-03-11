@@ -328,7 +328,7 @@ def add_bundle(request):
             for y in bundle_form2.bundle_services:
                 if services.name == y:
                     print("Can't add duplicate services")
-                    return HttpResponseRedirect("/Users/cust_serv/")
+                   # return HttpResponseRedirect("/Users/cust_serv/")
 
         for x in Bundle.objects.all():
             for y in bundle_form2.bundle_services:
@@ -446,7 +446,7 @@ def add_services(request):
         service_form = DisplayForm()
 
         #passing to the HTML ALL the contents in the Service database
-        service_form.services = Service.objects.all()
+        service_form.services = Service.objects.filter(deleted=False)
         #bundle_form = bForm();
         #bundle_form.bundles = Bundle.objects.all()
 
@@ -674,8 +674,9 @@ def market_rep(request):
             for services in Service.objects.all():
                 if services.name == package_name:
                     package = services
-                    if((check_if_any_users_subscribed(services.name))):
-                        Service.objects.filter(name=package_name).deleted = True
+                    if((checkUsersforSubscribedService(services.name))):
+                        (Service.objects.filter(name=package_name)).deleted = True
+                        print((Service.objects.filter(name=package_name)).deleted)
                     else:
                         print(package)
                         Service.objects.filter(name=package_name).delete()
@@ -844,7 +845,7 @@ def cust_serv(request):
 
             for x in Service.objects.all():
                 for y in bundle_form2.bundle_services:
-                    if x.name == y:
+                    if x.name == y and  not x.deleted:
                         userToChange.services.add(x)
                         userToChange.balance += x.price
                         userToChange.save()
@@ -931,15 +932,16 @@ def check_permission(UserProfile):
     else:
         return False
 
-def check_if_any_users_subscribed(ServicesName):
+def checkUsersforSubscribedService(ServicesName):
     allUsers = UserProfile.objects.all().filter(is_Market=False, is_Service=False)
     for user in allUsers:
-        for service in user:
+        for service in user.services.all():
             if(service.name == ServicesName):
                 return True
 
     return False
 
+#def checkUserforSuscbibedBundle(BundleName):
 
 #def validate_views(obj, ):
     #if render_loc!='':

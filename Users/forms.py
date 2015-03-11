@@ -144,4 +144,10 @@ class CustomerForm(forms.ModelForm):
         model = UserProfile
         fields = ('username', 'services', 'bundles')
 
+class CustomerInfoForm(forms.ModelForm):
+    user = forms.CharField(max_length=50, label="Current User")
+    class Meta:
+        model = UserProfile
+        fields = ('username', 'fname', 'lname', 'address', 'phoneNumber', 'userEmail')
+
 #class CreateService(forms.ModelForm):

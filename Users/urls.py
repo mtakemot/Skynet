@@ -19,5 +19,6 @@ urlpatterns = patterns('',
        url(r'^cust_serv/$', views.cust_serv, name='cust_serv'),
        url(r'^customer_page/$', views.customer_page, name='customer_page'),
        url(r'^add_bundles/$', views.add_bundle, name='add_bundle'),
-       url(r'^delete_bundles/$', views.delete_bundles, name='delete_bundle')
+       url(r'^delete_bundles/$', views.delete_bundles, name='delete_bundle'),
+       url(r'^customer_info/$', views.customerInfoPage,name='customer_info')
 )

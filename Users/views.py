@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from Users.models import Category, Page, UserProfile, UserFactory
-from Users.forms import CategoryForm, UserForm, UserProfileForm, RepForm, ServiceForm, DisplayForm, BillForm, BundleForm as bForm, BundleServForm, CustomerForm
+from Users.forms import CategoryForm, UserForm, UserProfileForm, RepForm, ServiceForm, DisplayForm, BillForm, BundleForm as bForm, BundleServForm, CustomerForm, CustomerInfoForm
 from Packages.models import Service, Bundle
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -932,6 +932,22 @@ def customer_page(request, customer):
 
     return render(request, 'Users/customer_page.html', {'Customer': current_user.username, 'services_form': current_user.services.all()})
     #only allow access to customers, redirect market rep and cust serv reps
+
+def customerInfoPage(request):
+    if request.method=='GET':
+        current_user = UserProfile.objects.get(user=request.user)
+        customer_form = CustomerInfoForm
+        customer_form.user = current_user
+      #  customer_form.fname = current_user.fname
+      #  customer_form.lname = current_user.lname
+      #  customer_form.address = current_user.address
+      #  customer_form.phoneNumber = current_user.phoneNumber
+
+        return render(request, 'customer_info.html', {'customer_form': current_user})
+    else:
+        return HttpResponseRedirect('/Users/')
+    #return render(request, '/Users/customer_info.html',{'Customer': customer_form})
+
 
 
 

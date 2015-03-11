@@ -43,12 +43,15 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_images', blank=True)
     fname = models.CharField(max_length=20, blank=True, verbose_name="First Name") #user first name
     lname = models.CharField(max_length=20, blank=True, verbose_name="Last Name") #user last name
+    address = models.CharField(max_length=50, blank=True)
+    phoneNumber = models.CharField(max_length=20, blank=True)
     userEmail = models.CharField(max_length=45, blank=True) #REQUIRED FOR AUTOEMAIL SERVICES
     services = models.ManyToManyField(serviceModels, blank=True)
     bundles = models.ManyToManyField(bundleModels, blank=True)
 
     #Follow is for customer's current balance, and balance threshold (for notifications)
     balance = models.IntegerField(max_length=9, default=0)
+    term_fees = models.IntegerField(max_length=9, default=0)
     threshold = models.IntegerField(max_length=9, default=0)
 
     is_Market = models.BooleanField(default=False)
@@ -59,9 +62,12 @@ class UserProfile(models.Model):
         return self.username
 
 
+
     def get_services(self):
         return "\n".join([p.name for p in self.services.all()])
 
+    def get_bundles(self):
+        return "\n".join([p.name for p in self.bundles.all()])
     # override save, b/c any change in a field will always save in DB using Django framework.
     # override so that before the actual userprofileobject.save() occurs,
     # check balance vs threshold and use rule obj method to verify if a notification
@@ -78,7 +84,8 @@ class UserProfile(models.Model):
 
 def UserFactory(newUser):
     profile=UserProfile(user=newUser, username=newUser, fname=newUser.first_name,
-                                   lname=newUser.first_name, userEmail=newUser.email, website=newUser.website)
+                                   lname=newUser.first_name, userEmail=newUser.email, website=newUser.website,
+                                   address=newUser.address, phoneNumber=newUser.phoneNumber, custType=newUser.custType)
     #profile.save(commit=False)
     return profile
 

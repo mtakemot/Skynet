@@ -42,6 +42,7 @@ class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     fname = forms.CharField(max_length=20, help_text="Please enter first name", label="First Name")
     lname = forms.CharField(max_length=20, help_text="Please enter last name", label="Last Name")
+
     #meta describes additional properties about the particular modelForm class it belongs to
     class Meta:
         model = User
@@ -51,9 +52,10 @@ class threshForm(forms.ModelForm):
     maxVal = forms.IntegerField()
 
 class UserProfileForm(forms.ModelForm):
+    phoneNumber = forms.CharField(max_length=20, help_text="Please enter current phone number", label="number")
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ('website', 'picture', 'address', 'phoneNumber')
 '''
 class ServiceForm(forms.ModelForm):
     services = forms.ChoiceField(widget=forms.RadioSelect)
@@ -72,15 +74,27 @@ class BundleServForm(forms.Form):
     class Meta:
         model = Bundle
         #fields = ('name', 'description', 'price', 'term_fee')
+class RepForm(forms.Form):
+    bundles = forms.MultipleChoiceField(
+                                        widget=CheckboxSelectMultiple
+                                        )
+    #name = forms.CharField(max_length=123, )
+    #description = forms.CharField(max_length=250)
+    #price = forms.IntegerField()
+    #term_fee = forms.IntegerField()
+    class Meta:
+        model = Bundle
+        #fields = ('name', 'description', 'price', 'term_fee')
 
 class ServiceForm(forms.ModelForm):
     name = forms.CharField(max_length=128,)
     description = forms.CharField(max_length=250)
     price = forms.IntegerField()
     term_fee = forms.IntegerField()
+    duration = forms.IntegerField()
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration',)
 
 #class BundleForm(forms.ModelForm):
     #name = forms.CharField(max_length=123, )
@@ -97,13 +111,13 @@ class BundleForm(forms.ModelForm):
     bundles = forms.CharField(max_length=120, label="Current Bundles")
     class Meta:
         model = Bundle
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 class BillForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 #class BundleForm(forms.ModelForm):
     #bundles = forms.CharField(max_length=120, label="Current Bundles")
@@ -115,13 +129,13 @@ class DisplayForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 class DeleteServiceForm(forms.ModelForm):
     services = forms.CharField(max_length=120, label="Current Services")
     class Meta:
         model = Service
-        fields = ('name', 'description', 'price', 'term_fee')
+        fields = ('name', 'description', 'price', 'term_fee', 'duration')
 
 class CustomerForm(forms.ModelForm):
     users = forms.CharField(max_length=5000, label="Current Users")

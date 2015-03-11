@@ -19,11 +19,11 @@
         -->
         {% csrf_token %}
         <table border="1" width="25%">
-             <tr><th>Service</th><th>Price</th></tr>
+             <tr><th>Service</th><th>Price</th><th>Duration</th></tr>
 
         {% for service in service_form%}
            <tr><td><input type = "radio" name = "service" value="{{ service.name }}">
-            {{ service.name }}</td> <td>${{ service.price }}</td></tr>
+            {{ service.name }}</td> <td>${{ service.price }}</td> <td>{{ service.duration }} Months</td></tr>
 
         {% endfor %}<br/>
         </table>
@@ -43,6 +43,9 @@
             <tr><td>
             Term Fee: </td><td><input type="number" name="term" value="" min="1" size="50" /></td>
             </tr>
+            <tr><td>
+            Duration in Months: </td><td><input type="number" name="duration" value="" min="1" size="50" /></td>
+            </tr>
         </table>
         <input type="submit" name="submit" value="Create Service" />
 
@@ -59,13 +62,14 @@
         -->
         {% csrf_token %}
         <table border="1" width="50%">
-             <tr><th>Bundle</th><th>Services</th><th>Price</th></tr>
+             <tr><th>Bundle</th><th>Services</th><th>Price</th><th>Duration</th></tr>
 
         {% for bundle in bundle_form%}
            <tr><td><input type = "radio" name = "bundle" value="{{ bundle.name }}">
             {{bundle.name}}</td>
                <td> {{bundle.get_services }}</td>
-           <td>${{ bundle.price }}</td></tr>
+           <td>${{ bundle.price }}</td>
+           <td>{{ bundle.duration }} Months</td></tr>
 
         {% endfor %}<br/>
         </table>
@@ -86,6 +90,9 @@
             </tr>
             <tr><td>
             Term Fee: </td><td><input type="number" name="term" value="" min="1" size="50" /></td>
+            </tr>
+            <tr><td>
+            Duration in Months: </td><td><input type="number" name="duration" value="" min="1" size="50" /></td>
             </tr>
             <!--<tr><td>
                 Services:</td><td><!--<input types="checkbox" name="bservice" value=""></td>

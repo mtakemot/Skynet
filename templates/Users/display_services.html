@@ -79,6 +79,7 @@
             <tr>
                 <th class="text-left">Service</th>
                 <th class="text-left">Price</th>
+                <th class="text-left">Duration</th>
             </tr>
         </thead>
 
@@ -87,6 +88,7 @@
             <tr>
                 <td class="text-left">{{package}}</td>
                 <td class="text-left">${{package.price}}</td>
+                <td class="text-left">{{ package.duration }} Months</td>
             </tr>
         {% endfor %}
         </tbody>

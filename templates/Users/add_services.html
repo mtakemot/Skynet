@@ -69,7 +69,7 @@
         {% csrf_token %}
         <!---<table border="1" width="25%">--->
         <thead>
-             <tr><th>Service</th><th>Price</th></tr>
+             <tr><th>Service</th><th>Price</th> <th>Duration</th></tr>
         </thead>
 
         {% for service in service_form%}
@@ -78,6 +78,7 @@
                     <td><input type = "checkbox" name = "service" value="{{ service.name }}">
                                 {{service.name}}</td>
                     <td>${{ service.price }}</td>
+                    <td>{{ service.duration }} Months</td>
                 </tr>
             </tbody>
         {% endfor %}

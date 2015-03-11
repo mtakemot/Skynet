@@ -196,39 +196,6 @@
             <h2>You are a  {{ custType }} customer! </h2>
         </div>
 
-
-        <div id = "set">
-            <form id="user_form" method="post" action="/Users/">
-                {% csrf_token %}
-                <!---<table border="1" width="25%">
-                    <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
-                    <tr><td align="right">Current Threshold Value: ${{ thresholdvalue}} </td></tr>
-
-                    <tr><td align="right">
-                    <input type="number" name="maxVal"  min="0" max="99999" value=""/>
-                    </td>
-                    </tr>
-                    <tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" /></td></tr>
-                </table> --->
-                <table class ="table-fill">
-                    <tbody class ="table-hover">
-                        <tr><th>We can notify you when you balance gets close to your threshold!</th></tr>
-                        <tr><td align="right">Current Threshold Value: ${{ thresholdvalue}} </td></tr>
-
-                        <tr><td align="right">
-                            <input type="number" name="maxVal"  min="0" max="99999" value=""/>
-                            </td>
-                        </tr>
-                    <!---<tr><td align="right"><input type="submit" name="submit" value="Update Your Balance Threshold" size="50" />
-                    </td></tr>-->
-
-                    </tbody>
-                </table>
-
-                <input type="submit" name="submit" value="Update Your Balance Threshold" />
-            </form>
-        </div>
-
     </div>
 
 {% else %}

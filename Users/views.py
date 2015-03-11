@@ -583,7 +583,7 @@ def delete_services(request):
         for x in Service.objects.all():
             for y in bundle_form2.bundle_services:
                 if x.name == y:
-                    
+
                     current_user.services.remove(x)
                     current_user.balance -= x.price
                     current_user.term_fees += x.term_fee

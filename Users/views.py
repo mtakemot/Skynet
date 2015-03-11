@@ -328,7 +328,7 @@ def add_bundle(request):
             for y in bundle_form2.bundle_services:
                 if services.name == y:
                     print("Can't add duplicate services")
-                   # return HttpResponseRedirect("/Users/cust_serv/")
+                    return HttpResponseRedirect("/Users/add_bundles/")
 
         for x in Bundle.objects.all():
             for y in bundle_form2.bundle_services:
@@ -354,7 +354,7 @@ def add_bundle(request):
 
     else:
 
-        bundle_form = bForm();
+        bundle_form = bForm()
         bundle_form.bundles = Bundle.objects.all()
 
         for bundles in bundle_form.bundles:
@@ -394,7 +394,7 @@ def add_services(request):
             for y in bundle_form2.bundle_services:
                 if services.name == y:
                     print("Can't add duplicate services")
-                    #return HttpResponseRedirect("/Users/cust_serv/")
+                    return HttpResponseRedirect("/Users/add_services/")
 
         for x in Service.objects.all():
             for y in bundle_form2.bundle_services:
@@ -508,13 +508,20 @@ def view_bill(request):
         cost += bundle.price
 
     if request.method == 'POST':
-        value = request.POST['maxVal']
-        #not sure what it means BUT,
-        if(value):
-            if(int(value)>=0):
-                temp = int(value)
-                current_user.threshold = temp
-                current_user.save()
+        button = request.POST['submit']
+        print("button pressed in view bill: " , button)
+        if button == 'Update Your Balance Threshold':
+            value = request.POST['maxVal']
+            #not sure what it means BUT,
+            if(value):
+                if(int(value)>=0):
+                    temp = int(value)
+                    current_user.threshold = temp
+                    current_user.save()
+        else:
+            print("paying off term_fees")
+            current_user.term_fees = 0
+            current_user.save()
 
     return render(request, 'Users/view_bill.html', {'threshold':current_user.threshold, 'term_fees': current_user.term_fees, 'display_bundles': bundle_form.bundles.all(), 'display_services': bill_form.services, 'total':current_user.balance})
 

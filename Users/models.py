@@ -43,6 +43,8 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_images', blank=True)
     fname = models.CharField(max_length=20, blank=True, verbose_name="First Name") #user first name
     lname = models.CharField(max_length=20, blank=True, verbose_name="Last Name") #user last name
+    address = models.CharField(max_length=50, blank=True)
+    phoneNumber = models.CharField(max_length=20, blank=True)
     userEmail = models.CharField(max_length=45, blank=True) #REQUIRED FOR AUTOEMAIL SERVICES
     services = models.ManyToManyField(serviceModels, blank=True)
     bundles = models.ManyToManyField(bundleModels, blank=True)
@@ -82,7 +84,8 @@ class UserProfile(models.Model):
 
 def UserFactory(newUser):
     profile=UserProfile(user=newUser, username=newUser, fname=newUser.first_name,
-                                   lname=newUser.first_name, userEmail=newUser.email, website=newUser.website)
+                                   lname=newUser.first_name, userEmail=newUser.email, website=newUser.website,
+                                   address=newUser.address, phoneNumber=newUser.phoneNumber, custType=newUser.custType)
     #profile.save(commit=False)
     return profile
 

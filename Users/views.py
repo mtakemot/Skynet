@@ -152,7 +152,15 @@ def register(request):
             user.last_name = request.POST['lname']
             user.email = request.POST['email']
             user.website = request.POST['website']
-            custType = request.POST['custType']
+            user.custType = request.POST['custType']
+            user.phoneNumber = request.POST['phoneNumber']
+
+
+            try:
+                user.address = request.POST['address']
+            except:
+                print("address not correct")
+
 
 
 
@@ -166,7 +174,7 @@ def register(request):
             user.save()
 
             profile = UserFactory(user)
-            profile.custType=custType
+            #profile.custType=custType
             # profile = UserFactory(user)
 
             print("in views, exited factory call")

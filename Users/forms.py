@@ -42,6 +42,7 @@ class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     fname = forms.CharField(max_length=20, help_text="Please enter first name", label="First Name")
     lname = forms.CharField(max_length=20, help_text="Please enter last name", label="Last Name")
+
     #meta describes additional properties about the particular modelForm class it belongs to
     class Meta:
         model = User
@@ -51,9 +52,10 @@ class threshForm(forms.ModelForm):
     maxVal = forms.IntegerField()
 
 class UserProfileForm(forms.ModelForm):
+    phoneNumber = forms.CharField(max_length=20, help_text="Please enter current phone number", label="number")
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ('website', 'picture', 'address', 'phoneNumber')
 '''
 class ServiceForm(forms.ModelForm):
     services = forms.ChoiceField(widget=forms.RadioSelect)
